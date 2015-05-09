@@ -9,7 +9,7 @@ static class AdianHeaderClass : public PacketHeaderClass {
 public:
 	//constructor
 	//we are passing values to the parent class constructor 
-	AdianHeaderClass() : PacketHeaderClass("PacketHeader/Protoname", sizeof(hdr_adian_pkt)) {
+	AdianHeaderClass() : PacketHeaderClass("PacketHeader/Adian", sizeof(hdr_adian_pkt)) {
 		//Q: don't know what this bind_offset does
 		bind_offset(&hdr_adian_pkt::offset_);
 	}
