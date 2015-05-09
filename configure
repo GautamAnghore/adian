@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# check if <path/to/ns-allinone-2.35> passed or not
+if [ $# -ne 1 ]; then
+	echo "ERROR: No arguements passed"
+	echo "./configure <path/to/ns-allinone-2.35>"
+	exit 0
+fi
+
+# check if provided path is a directory or not
+if [ -d $1 ]; then
+	
+	# check if provided path contains ns2 folder or not
+	# it is just to check if the provided path is actually of ns-allinone dir or not
+
+	if [ ! -d "$1/ns-2.35" ]; then
+		echo "ERROR: <path/to/ns-allinone-2.35> does not seems like valid path"
+		exit 0
+	fi
+else
+	# path is not a directory
+	echo "ERROR: Arguement should be a Valid directory"
+	exit 0
+fi
+
+
+# check and truncate '/' in the end of provided path
+# like "../ns-allinone-2.35/" will become "../ns-allinone-2.35"
+
+str=$1
+last=$((${#str}-1))
+
+if [ "${str:$last:1}" == "/" ]; then
+	path=${str::-1}
+else
+	path=$str
+fi
+
+# create hard links for changed files in ns2 codebase
+
+find ns-allinone-2.35/ -type f | cut -d'/' -f 2- | while read line; do
+	ln -f "./ns-allinone-2.35/$line" "$path/$line"
+	if [ $? -eq 0 ]; then
+		echo "Link Created : ns-allinone-2.35/$line"
+	else
+		echo "ERROR: Link creation failed"
+		echo "ns-allinone-2.35/$line"
+	fi 
+done
+
+
+# create hard links for files related to adian
+echo "ADIAN FILES"
+
+mkdir "$path/ns-2.35/adian"
+
+find adian/ -type f | cut -d'/' -f 2- | while read line; do
+	ln -f "./adian/$line" "$path/ns-2.35/adian/$line"
+	if [ $? -eq 0 ]; then
+		echo "Link Created : ns-allinone-2.35/$line"
+	else
+		echo "ERROR: Link creation failed"
+		echo "ns-allinone-2.35/$line"
+	fi
+done
