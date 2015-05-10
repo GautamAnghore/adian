@@ -22,7 +22,7 @@ static class ADIANClass : public TclClass
   assert(argc == 5);
 
    return (new ADIAN((nsaddr_t)Address::instance().str2addr(argv[4])));
-   //we return a new Protoname object with the identifier stated in argv[4]. We use the Address class to get a nsaddr t type from a string.
+   //we return a new ADIAN object with the identifier stated in argv[4]. We use the Address class to get a nsaddr t type from a string.
 
   }
  } class_rtADIAN;
@@ -51,7 +51,7 @@ static class ADIANClass : public TclClass
 
 
   //It consists of the implementation of the command() method that our agent inherites from the Agent class.
-   int Protoname::command(int argc, const char*const* argv) {
+   int ADIAN::command(int argc, const char*const* argv) {
    if (argc == 2)
     {
      if (strcasecmp(argv[1], "start") == 0) 
@@ -149,12 +149,12 @@ struct hdr_ip* ih= HDR_IP(p);
 struct hdr_ADIAN_pkt* ph = HDR_ADIAN_PKT(p);
 // All routing messages are sent from and to port RT_PORT, so we check it.
 
- /*next 2 lines get IP header and protoname packet header as usual. After that we make sure source and destination ports are RT PORT. This
+ /*next 2 lines get IP header and ADIAN packet header as usual. After that we make sure source and destination ports are RT PORT. This
   constant is defined in common/packet.h and it equals 255. This port is reserved to attach the routing agent.*/
 assert(ih->sport() == RT_PORT);
 assert(ih->dport() == RT_PORT);
 
-/* ... processing of protoname packet ... */
+/* ... processing of ADIAN packet ... */
 // Release resources acquired by packet.
 Packet::free(p);
  }
@@ -187,7 +187,7 @@ Packet::free(p);
    ch->addr_type()=NS_AF_INET;		/*The last field we fill is the address type.We choose NS AF INET because we are implementing
                                           an Internet protocol.Included in packet.h*/
 
-  ch->xmit_failure_= protoname_mac_failed_callback;
+  ch->xmit_failure_= ADIAN_mac_failed_callback;
   ch->xmit_failure_data_ = (void*)this;
 
 
@@ -223,7 +223,7 @@ Packet::free(p);
  {
   struct hdr_cmn* ch = HDR_CMN(p);
   struct hdr_ip* ih = HDR_IP(p);
-  ch->xmit_failure_= protoname_mac_failed_callback;
+  ch->xmit_failure_= ADIAN_mac_failed_callback;
  ch->xmit_failure_data_ = (void*)this;
 
 //a packet has to be delivered to the upper-layer agents
@@ -262,12 +262,12 @@ Packet::free(p);
 
 
 //Functions below are Receiving Information from Layer-2 Protocols
-static void protoname_mac_failed_callback(Packet *p, void *arg) {
-((Protoname*)arg)->mac_failed(p);
+static void ADIAN_mac_failed_callback(Packet *p, void *arg) {
+((ADIAN*)arg)->mac_failed(p);
 }
-/*mac failed() depends very much on protoname specification. As an example, the next piece of code prints a debug
+/*mac failed() depends very much on ADIAN specification. As an example, the next piece of code prints a debug
 message and drops the packet.*/
- void Protoname::mac_failed(Packet* p) {
+ void ADIAN::mac_failed(Packet* p) {
 struct hdr_ip* ih= HDR_IP(p);
 struct hdr_cmn* ch = HDR_CMN(p);
 debug("%f: Node %d MAC layer cannot send a packet to node %d\n",CURRENT_TIME,ra_addr(),ch->next_hop());
