@@ -1,0 +1,22 @@
+#ifndef __ADIAN_h__
+#define __ADIAN_h__
+#include "ADIAN_pkt.h"
+#include <agent.h>
+#include <packet.h>
+#include <trace.h>
+#include <timer-handler.h>
+#include <random.h>
+#include <classifier-port.h>
+#include <mobilenode.h> /*MobileNode class owns two functions 1)base stn(), which returns identifier of the base station the mobile node is
+attached to. 2)set base stn() which is be able to establish suitable base station for that mobile node*/
+
+#define CURRENT_TIME
+#define JITTER Scheduler::instance().clock()
+(Random::uniform()*0.5)
+class ADIAN; // forward declaration
+/* Timers for handling packet forwarding at random time.*/
+class ADIAN_PktTimer : public TimerHandler {
+public:
+ADIAN_PktTimer(ADIAN* agent) : TimerHandler() {
+agent_ = agent;
+}
