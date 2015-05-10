@@ -1,6 +1,9 @@
 #ifndef __ADIAN_h__
 #define __ADIAN_h__
 #include "ADIAN_pkt.h"
+
+//routing agents and alarm definiton
+
 #include <agent.h>
 #include <packet.h>
 #include <trace.h>
