@@ -1,5 +1,6 @@
-#ifndef __ADIAN_rtable_h__
-#define __ADIAN_rtable_h__
+#ifndef __adian_rtable_h__
+#define __adian_rtable_h__
+
 #include <trace.h>
 #include <map>			//We use a hash table (map) as the storage structure.
 #include<common/ip.h>
@@ -8,10 +9,11 @@
 associated to the routes, sequence numbers, lifetimes.*/
 
  typedef std::map<nsaddr_t, nsaddr_t> rtable_t;
- class ADIAN_rtable {
- rtable_t rt_;
+
+ class Adian_rtable {
+ 	rtable_t rt_;
  public:
-  ADIAN_rtable();
+  Adian_rtable();
   void print(Trace*);
   void clear();
   void rm_entry(nsaddr_t);
