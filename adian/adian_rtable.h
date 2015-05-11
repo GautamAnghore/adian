@@ -71,7 +71,7 @@ public:
 	void rm_entry(nsaddr_t);						//remove entry(destination address)
 	void add_entry(nsaddr_t, nsaddr_t, u_int8_t);	//add entry(destination address, next hop, numberofnodes)
 	void update_entry(nsaddr_t, nsaddr_t, u_int8_t); // update entry corrosponding to destination address
-	rtable_t lookup(nsaddr_t);						//find entry(destination address)
+	rtable_entry lookup(nsaddr_t);						//find entry(destination address)
 
 };
 

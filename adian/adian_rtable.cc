@@ -1,49 +1,87 @@
+#include "adian_rtable.h"
 
-adian_rtable::adian_rtable() { }
+//--------------- routing table functions ---------------------
+
+// constructor
+Adian_rtable::Adian_rtable() { }
 
 //The print() function will dump the contents of the node’s routing table to the trace file.
-void adian_rtable::print(Trace* out) {
-	sprintf(out->pt_->buffer(), "P\tdest\tnext");
+void Adian_rtable::print(Trace* out) {
+	
+	sprintf(out->pt_->buffer(), "A\tdest\tnext_hop\tnn");
 	out->pt_->dump();
-	for (rtable_t::iterator it = rt_.begin(); it != rt_.end(); it++) 
-  	{
-   		sprintf(out->pt_->buffer(), "P\t%d\t%d",(*it).first,(*it).second);
-   		out->pt_->dump();
+	
+	// Iterate over through the _nexthop_ map 
+	rtable_nexthop_t::iterator it_hop;
+	
+	for (it_hop = rt_nexthop_.begin(),; it_hop != rt_nexthop_.end(); it_hop++) {
+  		
+  		// foreach destination -> (*it_hop).first, find the corrosponding number of nodes
+  		rtable_nn_t::iterator it_nn = rt_nn_.find((*it_hop).first);
+  		if (it_nn == rt_nn_.end()) {
+  			// number of nodes entry not exists for destination node
+  			// that means inconsistent data
+  			sprintf(stderr, "Inconsistent Data, number of nodes entry not exists for %d node\n", (*it_hop).first);
+  		}
+  		else {
+  			//found all data, dump it
+   			sprintf(out->pt_->buffer(), "A\t%d\t%d\t%d",(*it_hop).first,(*it_hop).second,(*it_nn).second);
+   			out->pt_->dump();
+  		}
   	}
  }
 
-
-//function removes all entries in routing table.
-void adian_rtable::clear() {
- 	rt_.clear();
+//function removes all entries in routing table
+void Adian_rtable::clear() {
+ 	rt_nexthop_.clear();
+ 	rt_nn_.clear();
 }
 
 
-//To remove an entry given its destination address we implement the rm entry() function.
-void adian_rtable::rm_entry(nsaddr_t dest) {
-	rt_.erase(dest);
+//function removes entry given the destination address
+void Adian_rtable::rm_entry(nsaddr_t dest) {
+	rt_nexthop_.erase(dest);
+	rt_nn_.erase(dest);
 }
 
 
-//add_entry() is used to add a new entry in the routing table given its destination and next hop addresses.
-void adian_rtable::add_entry(nsaddr_t dest, nsaddr_t next) {
-	rt_[dest] = next;
+//function adds a new entry in the routing table given its destination,next hop address and nn
+void Adian_rtable::add_entry(nsaddr_t dest, nsaddr_t next, u_int8_t nn) {
+	rt_nexthop_[dest] = next;
+	rt_nn_[dest] = nn;
 }
 
+//function updates the next_hop and number of nodes corrosponding to dest entry
+void Adian_rtable::update_entry(nsaddr_t dest, nsaddr_t nexthop, u_int8_t nn) {
+	//update operation
+	rt_nexthop_[dest] = nexthop;
+	rt_nn_[dest] = nn;
+}
 
-/*definition of lookup().
-Lookup() returns the next hop address of an entry given its destination address. If such an entry doesn’t exist, (that is, there is no route for that destination) the function returns IP BROADCAST. Of course we include common/ip.h in order to use this constant.*/
-nsaddr_t adian_rtable::lookup(nsaddr_t dest) {
-	rtable_t::iterator it = rt_.find(dest);
+//function returns rtable_t object containing the next hop address and number of nodes
+//if there exists an entry for destination in the routing table
+rtable_entry Adian_rtable::lookup(nsaddr_t dest) {
 
-	if (it == rt_.end())
- 		return IP_BROADCAST;
- 	else
-  		return (*it).second;
- }
+	// to return the result
+	rtable_entry result;
+	result.daddr = dest;
 
-
-//size() returns the number of entries in the routing table.
-u_int32_t  adian_rtable::size() {
-	return rt_.size();
+	rtable_nexthop_t::iterator it_hop = rt_nexthop_.find(dest);
+	if (it_hop == rt_nexthop_.end()) {
+		result.next_hop = IP_BROADCAST;
+		result.nn = 0;
+ 		return result;
+	}
+ 	else {
+  		rtable_nn_t::iterator it_nn = rt_nn_.find(dest);
+  		if(it_nn == rt_nn_.end()) {
+  			result.next_hop = IP_BROADCAST;
+			result.nn = 0;
+	 		return result; 
+  		}
+  		else {
+  			result.next_hop = (*it_hop).second;
+  			result.nn = (*it_nn).second;
+  		}
+ 	}
  }
