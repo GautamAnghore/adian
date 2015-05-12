@@ -1,4 +1,5 @@
 #include "adian_rtable.h"
+#include <vector>
 
 //--------------- routing table functions ---------------------
 
@@ -14,7 +15,7 @@ void Adian_rtable::print(Trace* out) {
 	// Iterate over through the _nexthop_ map 
 	rtable_nexthop_t::iterator it_hop;
 	
-	for (it_hop = rt_nexthop_.begin(),; it_hop != rt_nexthop_.end(); it_hop++) {
+	for (it_hop = rt_nexthop_.begin(); it_hop != rt_nexthop_.end(); it_hop++) {
   		
   		// foreach destination -> (*it_hop).first, find the corrosponding number of nodes
   		rtable_nn_t::iterator it_nn = rt_nn_.find((*it_hop).first);
@@ -85,3 +86,44 @@ rtable_entry Adian_rtable::lookup(nsaddr_t dest) {
   		}
  	}
  }
+
+
+//------------------------neighbourhood table------------------------------
+
+ //constructor
+Adian_nbtable::Adian_nbtable(){ }
+
+//print function will dump all enteries of  its neighbouring table to trace file
+void Adian_nbtable::print(Trace* out) {
+	sprintf(out->pt_->buffer(),"a\tnode\n");
+	out->pt_->dump();
+
+	//Iterate over through the _nb_ list
+	nbtable_t::iterator it_nb;
+
+	for(it_nb = nb_.begin(); it_nb != nb_.end(); it_nb++ ) {
+		sprintf(out->pt_->buffer(), "A\t%d",*it_nb);
+   		out->pt_->dump();
+	}
+}
+
+// remove all the enteries in neighbourhood table
+void Adian_nbtable::clear(){
+	nb_.clear();
+}
+
+// remove a particular entry in neighbourhood table
+void Adian_nbtable::rm_entry(nsaddr_t neighbour){
+	nb_.erase(dest);
+}
+
+// add a new node to the neighbourhood 
+void Adian_nbtable::add_entry(nsaddr_t neighbour){
+	nb_.push_back(neighbour);// adds a entry from back of the list
+}
+
+//to get all the neighbour nodes from neighbourhood table
+nsaddr_t* Adian_nbtable::get_neighbours(){
+	std::vector<nsaddr_t*> neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
+	return neighbours_;
+}
