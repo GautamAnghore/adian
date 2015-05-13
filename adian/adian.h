@@ -1,73 +1,137 @@
 #ifndef __adian_h__
 #define __adian_h__
-#include "adian_pkt.h"
 
-//routing agents and alarm definiton
+#include "adian_pkt.h"
+#include "adian_rtable.h"
+#include "adian_lists.h"
 
 #include <agent.h>
 #include <packet.h>
 #include <trace.h>
+#include <cmu-trace.h>
 #include <timer-handler.h>
 #include <random.h>
-#include <classifier-port.h>
-#include <mobilenode.h> 
-/*MobileNode class owns two functions we are interested in. First of all
-is base stn(), which returns identifier of the base station the mobile node is
-attached to. Second is set base stn() which is be able to establish suitable base
-station for that mobile node*/
+#include <classifier/classifier-port.h>
 
 #define CURRENT_TIME  Scheduler::instance().clock()
 #define JITTER  (Random::uniform()*0.5)
 
-class Adian; // forward declaration
-/* Timers */
-class Adian_PktTimer : public TimerHandler {
+#define PING_INTERVAL			1		//Interval after which agent pings to get neighbours
+#define NB_UPDATE_INTERVAL		2		//Interval after which nb_table is flushed
+#define LIST_UPDATE_INTERVAL	2		//Interval after which expired values are removed from all lists
 
-	//Constructor
+class ADIAN; // forward declaration for timer definations
+
+//---------------------------- Timers --------------------------------//
+
+// Timer for Rebuilding Neighbourhood table
+class Neighbour_timer : public Handler {
+private:
+	ADIAN*	agent;		// Agent with which this timer will be associated
+	Event	e;			// variable which will be used to catch the event
 public:
-	Adian_PktTimer(Adian* agent) : TimerHandler() {
-		agent_ = agent;
-	}
-
-protected:	
-	Adian* agent_;
-	//MobileNode* node_;
-	virtual void expire(Event* e);
-};
-
-/* Agents */
-class Adian : public Agent {
-
-/* Friends */
-	friend class Adian_PktTimer;
-
-/* Private members*/
-	nsaddr_t  ra_addr_;
-	adian_state  state_;
-	adian_rtable  rtable_;
-	int  accesible_var_;
-	u_int8_t  seq_num_;
-	
+	Neighbour_timer(ADIAN *a): agent(a) {}
 protected:
-	PortClassifier*  dmux_;  // For passing packets up to agents.
-	Trace*  logtarget_; // For logging.
-	Adian_PktTimer pkt_timer_; // Timer for sending packets.
+	void expire(Event*);	// Function called when this timer expires
+							// Truncate the Neighbourhood table and call 
+							// the function to rebuild the neighbourhood table 
+};
 
-	inline nsaddr_t&  ra_addr() { return ra_addr_; }
-	inline adian_state&  state() { return state_; }
-	inline int&  accessible_var() { return accessible_var_; }
+// Instead of using different timers classes and handling different events for each list
+// updation, we can use single timer class and update each list.
+class List_timer : public Handler {
+private:
+	ADIAN*	agent;	
+	Event	e;	
+public:
+	List_timer(ADIAN *a): agent(a) {}
+protected:
+	void expire(Event*);	// remove expired entries from each list
+							// Reply_Route_list, Data_Source_list, Attempt_list
+							// and Failure_Path_list
+};
 
 
-	void  forward_data(Packet*);
-	void  recv_adian_pkt(Packet*);
-	void  send_adian_pkt();
-	void  reset_adian_pkt_timer();
+//-------------------------------- The Routing Agent ----------------------------------//
+
+class ADIAN : public Agent {
+
+	// Friend List
+	friend class Neighbour_timer;
+	friend class List_timer;
+
+protected:
+	//(why protected? why not private)
+
+	// Node Attributes/Properties
+	nsaddr_t  					ra_addr_;			// Address of this node
+
+	// Agent Tables 
+	Adian_rtable 				routing_table_;
+	Adian_nbtable				neighbour_table_;
+	Adian_btable 				belief_table_;
+
+	// Agent Lists
+	Adian_Reply_Route_list		reply_route_list_;
+	Adian_Data_Source_list		data_source_list_;
+	Adian_Attempt_list			attempt_list_;
+	Adian_Failed_Path_list 		failed_path_list_;
+
+	// Agent Timers
+	Neighbour_timer				nbtimer;
+	List_timer					ltimer;
+
+	// Accessibility Variables
+	PortClassifier*  			dmux_;  			// For passing packets up to agents.
+	Trace*  					logtarget_; 		// For logging.
 
 
 public:
-	Adian(nsaddr_t);
-	int command(int, const char*const*);
 
-	void recv(Packet*, Handler*);
+	//----------------------- Constructor ------------------------------------
+	ADIAN(nsaddr_t);									//(id)
+
+	//------------------ Packet Receiving functions --------------------------
+protected:
+	// Master Recieve Method for ADIAN packets
+	void	recvADIAN(Packet*);					// If the packet type is PT_ADIAN,
+												// recv will call this funcition
+												// It will check the packet type 
+												// and call the respective reciever
+
+	// Different Packet specific recievers
+	void	recv_ping(Packet*);
+	void	recv_ping_reply(Packet*);
+	void	recv_req(Packet*);
+	void	recv_req_reply(Packet*);
+	void	recv_error(Packet*);
+
+public:
+	// Master Recieve Method for ALL packets
+	void	recv(Packet*, Handler*);			// On recieving a packet, this method is
+												// is called. It checks various possiblities
+												// and if the packet type is PT_ADIAN, calls
+												// master method for adian pkt `recvADIAN`
+
+	//------------------- Packet Transmission functions ----------------------
+protected:
+	// Master Trasmission Function
+	void	forward_data(Packet*);				// Called by recv() function, checks if the packet
+												// is destined for this node and accepts it or
+												// checks if it needs to be forwarded or replied
+												// with another new packet.
+	// Different Packet specific Transmission functions
+	// (TODO: Parameters need to be decided during implementations)
+	void	send_ping();
+	void	send_ping_reply();
+	void	send_req();
+	void	send_req_reply();
+	void	send_error();
+
+	//--------------------- TCL Binding helper function -----------------------
+	int 	command(int, const char*const*);	// defines various commands and their implementations
+												// that can be used from TCL interface. 
+
 };
+
 #endif
