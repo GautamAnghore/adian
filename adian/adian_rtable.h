@@ -48,13 +48,13 @@ typedef struct {
 	nsaddr_t	daddr;		//destination address
 	u_int8_t	nn;			//number of nodes
 	u_int32_t	total;		//total number of requests for sending data to daddr
-	u_int32_t	success;	//successful transections
+	u_int32_t	success;	//successful transactions
 	float		belief;		//belief degree
 
 } btable_entry;
 
 // belief table data type
-typedef std::list<belief_entry> btable_t;
+typedef std::list<btable_entry> btable_t;
 
 // ADIAN routing table
 class Adian_rtable {
@@ -107,7 +107,7 @@ public:
 													//total number of trasactions = 0, success= 0, belief = 100.00
 	void add_success(nsaddr_t, nsaddr_t);			//add a successful transaction to this path
 	void add_failure(nsaddr_t, nsaddr_t);			//add a failed transaction to this path
-	btable_t lookup(nsaddr_t, nsaddr_t);			//look for a path to daddr using next_hop
+	btable_t get_path(nsaddr_t);					//look for a path to daddr using next_hop
 
 };
 

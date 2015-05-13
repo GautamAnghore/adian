@@ -88,7 +88,7 @@ rtable_entry Adian_rtable::lookup(nsaddr_t dest) {
  }
 
 
-//------------------------neighbourhood table------------------------------
+//------------------------neighbourhood table functions------------------------------
 
  //constructor
 Adian_nbtable::Adian_nbtable(){ }
@@ -114,7 +114,7 @@ void Adian_nbtable::clear(){
 
 // remove a particular entry in neighbourhood table
 void Adian_nbtable::rm_entry(nsaddr_t neighbour){
-	nb_.erase(dest);
+	nb_.erase(neighbour);
 }
 
 // add a new node to the neighbourhood 
@@ -126,4 +126,80 @@ void Adian_nbtable::add_entry(nsaddr_t neighbour){
 nsaddr_t* Adian_nbtable::get_neighbours(){
 	std::vector<nsaddr_t*> neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
 	return neighbours_;
+}
+
+//vectors elements can be accesed directly with their index. (std::vector v = get_neighbours();)
+
+
+
+//-------------------------------Belief Table functions----------------------------------
+
+//constructor
+Adian_btable::Adian_btable(){ }
+
+
+//to print all content of belief table in trace file
+void Adian_btable::print(Trace* out) {
+	
+	sprintf(out->pt_->buffer(), "A\tnext_hop\tdest\tnn\ttotal_trans\tsuccessful_trans\tbelief");
+	out->pt_->dump();
+	
+	// Iterate over through the  map 
+	btable_t::iterator it_bt;
+	
+	for (it_bt = bt_.begin(); it_bt != bt_.end(); it_bt++) {
+   			sprintf(out->pt_->buffer(), "A\t%d\t%d\t%d\t%d\t%d\t%f",it_bt->next_hop,it_bt->daddr,it_bt->nn,it_bt->total,it_bt->success,it_bt->belief);
+   			out->pt_->dump();
+  	}
+ }
+
+ //clear complete belief table
+ void Adian_btable::clear(){
+	bt_.clear();
+}
+
+//to remove a particular entry
+void Adian_btable::rm_entry(nsaddr_t next_hop, nsaddr_t dest_addr){
+	btable_t::iterator it_bt
+
+	for(it_bt = bt_.begin(); it_bt != bt_.end();it_bt++) {
+		if((it_bt->next_hop == next_hop)&&(it_bt->daddr == dest_addr)){
+			bt_.erase(*it_bt);
+		}
+	}
+}
+
+//to add a new entry for a particular route
+void Adian_btable::add_entry(nsaddr_t next_hop, nsaddr_t dest_addr,u_int8_t nn){
+	btable_entry new_entry; //new struct btable_entry type object containing all values of new node.
+	new_entry.next_hop = next_hop;
+	new_entry.daddr = dest_addr;
+	new_entry.nn = nn;
+	new_entry.total = 0;
+	new_entry.success = 0;
+	new_entry.belief = 100.00;
+	bt_.push_back(new_entry);//add that entry to the belief table in the end
+}
+
+//to add a success transaction to that path
+void Adian_btable::add_success(nsaddr_t next_hop, nsaddr_t dest_addr) {
+	btable_t::iterator it_bt
+
+	for(it_bt = bt_.begin(); it_bt != bt_.end();it_bt++) {
+		if((it_bt->next_hop == next_hop)&&(it_bt->daddr == dest_addr)){
+			it_bt->total+=1;
+			it_bt->success+=1;
+			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
+		}
+}
+
+//to add a failure transaction to that path
+void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
+	btable_t::iterator it_bt
+
+	for(it_bt = bt_.begin(); it_bt != bt_.end();it_bt++) {
+		if((it_bt->next_hop == next_hop)&&(it_bt->daddr == dest_addr)){
+			it_bt->total+=1;
+			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
+		}
 }
