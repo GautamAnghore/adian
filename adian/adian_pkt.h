@@ -14,8 +14,12 @@
 
 
 // Packet accessing Macros
-#define HDR_ADIAN(p) 		((struct hdr_adian*)hdr_adian::access(p))
-#define HDR_ADIAN_PING(p) 	((struct hdr_adian*)hdr)
+#define HDR_ADIAN(p) 				((struct hdr_adian*)hdr_adian::access(p))
+#define HDR_ADIAN_PING(p) 			((struct hdr_adian_ping*)hdr_adian::access(p))
+#define HDR_ADIAN_PING_REPLY(p)		((struct hdr_adian_ping_reply*)hdr_adian::access(p))
+#define HDR_ADIAN_REQ(p)			((struct hdr_adian_req*)hdr_adian::access(p))
+#define HDR_ADIAN_REQ_REPLY(p)		((struct hdr_adian_req_reply*)hdr_adian::access(p))
+#define HDR_ADIAN_ERROR(p)			((struct hdr_adian_error*)hdr_adian::access(p))
 
 //general header shared by all headers
 struct hdr_adian {
@@ -77,6 +81,16 @@ struct hdr_adian_error {
 
 	u_int32_t	seq_num_;		// sequence number, not confirm needed or not
 	nsaddr_t	daddr_;			// destination address to which data delivery failed
+};
+
+// for size calculation of header-space
+union hdr_all_adian {
+	hdr_adian				gh;
+	hdr_adian_ping			ping;
+	hdr_adian_ping_reply 	pingreply;
+	hdr_adian_req 			req;
+	hdr_adian_req_reply 	rep;
+	hdr_adian_error 		error;
 };
 
 #endif
