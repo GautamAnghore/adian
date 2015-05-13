@@ -1,5 +1,6 @@
 #include "adian_rtable.h"
 #include <vector>
+#include "adian_lists.h"
 
 //--------------- routing table functions ---------------------
 
@@ -202,4 +203,35 @@ void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
 			it_bt->total+=1;
 			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
 		}
+}
+
+//to select other paths if one path fails
+btable_entry Adian_btable::get_path(nsaddr_t dest){
+	float min_belief = 0.00;//initial minimum belief is set to 0; to compare
+	btable_entry next_suitable_path; //another btable_entry type entry to return a complete next suitable path to follow if one fails
+	btable_t::iterator it_bt
+
+	for(it_bt = bt_.begin(); it_bt != bt_.end(); it_bt++) {
+		if((it_bt->daddr == dest)&&(it_bt->belief > min_belief)) {
+			if(!(Adian_Failed_Path_list::check_failed_path(uid, it_bt->next_hop, dest)) { //checks if that node does not exists in failure list
+				min_belief = it_bt->belief;
+				//next suitable path values will be equal to the entry values currently pointed by iterator
+				next_suitable_path.next_hop = it_bt->next_hop;
+				next_suitable_path.daddr = it_bt->daddr;
+				next_suitable_path.nn = it_bt->nn;
+				next_suitable_path.total = it_bt->total;
+				next_suitable_path.success = it_bt->success;
+				next_suitable_path.belief = it_bt->belief; 
+			}
+		}
+	}
+	//if some other possible nod is found it will return next_suitable_path structure of btable_entry type except return null;
+	if(next_suitable_path.next_hop == NULL){
+		return NULL;
+	}
+
+	else {
+		return next_suitable_path;
+	}
+
 }

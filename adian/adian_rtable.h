@@ -107,7 +107,7 @@ public:
 													//total number of trasactions = 0, success= 0, belief = 100.00
 	void add_success(nsaddr_t, nsaddr_t);			//add a successful transaction to this path
 	void add_failure(nsaddr_t, nsaddr_t);			//add a failed transaction to this path
-	btable_t get_path(nsaddr_t);					//look for a path to daddr using next_hop
+	btable_entry get_path(nsaddr_t);				//look for a path to daddr using next_hop
 
 };
 
