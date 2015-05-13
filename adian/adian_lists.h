@@ -7,6 +7,12 @@
 #define __adian_lists_h__
 
 #include <map>		// lists implemented using hash tables
+#include <list>		// for failed path list
+
+#define REPLY_ROUTE_EXPIRE_TIME		1.0
+#define DATA_SOURCE_EXPIRE_TIME		1.0
+#define ATTEMPT_EXPIRE_TIME			1.0
+#define FAILED_PATH_EXPIRE_TIME		1.0
 
 typedef std::map<u_int32_t, double> seq_expire_t;
 typedef std::map<int, double> uid_expire_t;
@@ -129,11 +135,12 @@ class Adian_Failed_Path_list {
 public:
 	Adian_Failed_Path_list();
 	void rm_entry(int);									//(packet_uid)
-	void add_failed_path(int, failed_path);				//add failed path to existing path list
+	void add_failed_path(int, nsaddr_t, nsaddr_t);		//add failed path to existing path list
 														//if entry do not exist calls add_new_packet
 	int check_failed_path(int, nsaddr_t, nsaddr_t);		// 1 - exists   0 - not exists
 														// (uid, next_hop, destination)
-	double expire_time(int);							// get the expire time 
+	double expire_time(int);							// get the expire time
+	void add_expire_time(int,double);					// add expiry time in existing time 
 };
 
 #endif
