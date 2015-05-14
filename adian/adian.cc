@@ -279,6 +279,81 @@ void ADIAN::recv_ping_reply(Packet* p) {
 }
 
 /*
+ * Routine for Recieving Request Packet recv_req(p)
+ */
+// This type of packet is recieved when a route is being constructed
+// Request - a request for sending data to destination node
+void ADIAN::recv_req(Packet* p) {
+
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_req *ah = HDR_ADIAN_REQ(p);
+
+    // Algo
+    // search neighbourhood table for requested destination
+        // if yes send reply back saying yes
+    // search routing table
+        // if yes send reply back saying yes
+
+    // before sending request to neighbours, update the Route Reply list 
+    //              with respect to sequence number
+    // request neighbours with same seq number, same destination, same root, ttl-1
+
+    if(neighbour_table_.lookup(ah->daddr_)) {
+        // found in neighbour table
+        send_req_reply(ih->saddr(), ah->daddr_, ah->rootaddr_, ah->seq_num_, ah->hop_count_+1, IP_DEF_TTL);
+    }
+    else {
+        rtable_entry look = routing_table_.lookup(ah->daddr_);
+        if(look.next_hop != IP_BROADCAST) {
+            // route found
+            send_req_reply(ih->saddr(), ah->daddr_, ah->rootaddr_, ah->seq_num_, ah->hop_count_+look.nn, IP_DEF_TTL);
+        }
+        else {
+            //(seq num, reply to addr, expire)
+            reply_route_list_.add_reply_route(ah->seq_num_, ih->saddr(), CURRENT_TIME+REPLY_ROUTE_LIST_LIFE);
+            send_req(ah->daddr_, ah->rootaddr_, ah->seq_num_, ih->ttl_-1);
+        }
+    }
+    Packet::free(p);
+}
+
+/*
+ * Routine for Recieving Request Packet Reply recv_req_reply(p)
+ */
+// This type of packet is recieved only if the request sent for finding route to destination
+// is successful. 
+void ADIAN::recv_req_reply(Packet* p) {
+
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_req_reply *ah = HDR_ADIAN_REQ_REPLY(p);
+
+    // Algo
+    // insert into Belief table, the entry with (ih->saddr() as nexthop and ah->daddr as destination)
+    // check the entry in routing table and compare based on number of nodes and update if this
+    //      route is good
+    // check if this node is root
+        // if yes, free the packet (if possible, invoke resending of packet as route found)
+        // else, check the route reply list. if entry for seq number exists, 
+        //          send a req_reply type packet back to source node.
+
+    belief_table_.add_entry(ih->saddr(), ah->daddr_, ah->hop_count_);
+
+    rtable_entry look = routing_table_.lookup(ah->daddr_);
+    if(look.next_hop == IP_BROADCAST || ah->hop_count_ < look.nn)
+    {
+        //(destination address, next_hop, hop count)
+        routing_table_.update_entry(ah->daddr_, ih->saddr(), ah->hop_count_);
+    }
+
+    if(ah->rootaddr_ != ra_addr_) {
+        if(reply_route_list_.lookup(ah->seq_num_))
+            send_req_reply(reply_route_list_.lookup(ah->seq_num_), ah->daddr_, ah->rootaddr_, ah->seq_num_, ah->hop_count_ + 1, ih->ttl_-1);
+    }
+
+    Packet::free(p);
+}
+
+/*
  * Packet Sending Routines 
  */
 
@@ -348,6 +423,96 @@ void ADIAN::send_ping_reply(nsaddr_t daddr, u_int32_t seq_num) {
 
     Scheduler::instance().schedule(target_, p, 0.0);    // send immediatly
 }
+
+
+/*
+ * Routine for Sending Request Packet send_req()
+ */
+// This routine is called after checking the neighbour table and routing table.
+// If no path exists to daddr, this request will find a path
+void ADIAN::send_req(nsaddr_t route_daddr, nsaddr_t root, u_int32_t seq_num, int ttl) {
+   // Algo
+    // get all the neighbours from neighbour table
+    // for each
+        // create a packet
+        // set daddr as neighbour address
+        // set passed values
+        // send packet
+    neighbour_entry neighbours = neighbour_table_.get_neighbours();
+    neighbour_entry::iterator it;
+
+    for(it = neighbours.begin(); it != neighbours.end(); it++) {
+        Packet *p = allocpkt();     // allocpkt() is defined for all agents
+
+        struct hdr_cmn *ch = HDR_CMN(p);
+        struct hdr_ip *ih = HDR_IP(p);
+        struct hdr_adian_req *ah = HDR_ADIAN_REQ(p);
+
+        // adian header
+        ah->p_type_ = ADIANTYPE_REQ;
+        ah->seq_num_ = seq_num;
+        ah->daddr_ = route_daddr;
+        ah->rootaddr_ = root;
+        ah->hop_count_ = 0;
+
+        // common header
+        ch->ptype() = PT_ADIAN;
+        ch->size() = IP_HDR_LEN + ah->size();
+        ch->error() = 0;
+        ch->addr_type() = NS_AF_INET;
+        ch->direction() = hdr_cmn::DOWN;
+        ch->next_hop() = IP_BROADCAST;
+
+        ih->saddr() = ra_addr_;
+        ih->daddr() = (*it);
+        ih->sport() = RT_PORT;
+        ih->dport() = RT_PORT;
+        ih->ttl_ = ttl;       
+
+        Scheduler::instance().schedule(target_, p, 0.0);    // send immediatly
+    }
+}
+
+/*
+ * Routine for Sending Request Reply Packet send_req()
+ */
+// This routine is called after checking the neighbour table and routing table,
+// or after recieving a route reply and node is not root node.
+void ADIAN::send_req_reply(nsaddr_t daddr, nsaddr_t route_daddr, nsaddr_t root, u_int32_t seq_num, u_int32_t nn, int ttl) {
+   // Algo
+    // create a packet
+    // set passed values
+    // send packet
+    Packet *p = allocpkt();     // allocpkt() is defined for all agents
+
+    struct hdr_cmn *ch = HDR_CMN(p);
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_req_reply *ah = HDR_ADIAN_REQ_REPLY(p);
+
+    // adian header
+    ah->p_type_ = ADIANTYPE_REQ_REPLY;
+    ah->seq_num_ = seq_num;
+    ah->daddr_ = route_daddr;
+    ah->rootaddr_ = root;
+    ah->hop_count_ = nn;
+
+    // common header
+    ch->ptype() = PT_ADIAN;
+    ch->size() = IP_HDR_LEN + ah->size();
+    ch->error() = 0;
+    ch->addr_type() = NS_AF_INET;
+    ch->direction() = hdr_cmn::DOWN;
+    ch->next_hop() = IP_BROADCAST;
+
+    ih->saddr() = ra_addr_;
+    ih->daddr() = daddr;
+    ih->sport() = RT_PORT;
+    ih->dport() = RT_PORT;
+    ih->ttl_ = ttl;       
+
+    Scheduler::instance().schedule(target_, p, 0.0);    // send immediatly
+}
+
 
 
   //definition of send_ADIAN_pkt()
