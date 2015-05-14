@@ -124,8 +124,9 @@ void Adian_nbtable::add_entry(nsaddr_t neighbour){
 }
 
 //to get all the neighbour nodes from neighbourhood table
-nsaddr_t* Adian_nbtable::get_neighbours(){
-	std::vector<nsaddr_t*> neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
+typedef std::vector<nsaddr_t*> neighbour_entry;
+neighbour_entry Adian_nbtable::get_neighbours(){
+	neighbour_entry neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
 	return neighbours_;
 }
 
@@ -165,7 +166,7 @@ void Adian_btable::rm_entry(nsaddr_t next_hop, nsaddr_t dest_addr){
 
 	for(it_bt = bt_.begin(); it_bt != bt_.end();it_bt++) {
 		if((it_bt->next_hop == next_hop)&&(it_bt->daddr == dest_addr)){
-			bt_.erase(*it_bt);
+			it_bt = bt_.erase(it_bt);
 		}
 	}
 }
@@ -192,6 +193,7 @@ void Adian_btable::add_success(nsaddr_t next_hop, nsaddr_t dest_addr) {
 			it_bt->success+=1;
 			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
 		}
+	}
 }
 
 //to add a failure transaction to that path
@@ -203,16 +205,21 @@ void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
 			it_bt->total+=1;
 			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
 		}
+	}
 }
 
 //to select other paths if one path fails
 btable_entry Adian_btable::get_path(nsaddr_t dest){
-	float min_belief = 0.00;//initial minimum belief is set to 0; to compare
+	float min_belief = 12.50;//initial minimum belief is set to 0; to compare
 	btable_entry next_suitable_path = {0}; //another btable_entry type entry to return a complete next suitable path to follow if one fails
 	btable_t::iterator it_bt
 
-	for(it_bt = bt_.begin(); it_bt != bt_.end(); it_bt++) {
-		if((it_bt->daddr == dest)&&(it_bt->belief > min_belief)) {
+	for(it_bt = bt_.begin(); it_bt != bt_.end();) {
+		if(it_bt->belief <= min_belief){
+			it_bt = bt_.erase(it_bt);
+		}
+
+		else if((it_bt->daddr == dest)&&(it_bt->belief > min_belief)) {
 			if(!(Adian_Failed_Path_list::check_failed_path(uid, it_bt->next_hop, dest)) { //checks if that node does not exists in failure list
 				min_belief = it_bt->belief;
 				//next suitable path values will be equal to the entry values currently pointed by iterator
@@ -223,6 +230,10 @@ btable_entry Adian_btable::get_path(nsaddr_t dest){
 				next_suitable_path.success = it_bt->success;
 				next_suitable_path.belief = it_bt->belief; 
 			}
+		}
+
+		else{
+			it_bt++;
 		}
 	}
 	//if some other possible nod is found it will return next_suitable_path structure of btable_entry type except return null;
