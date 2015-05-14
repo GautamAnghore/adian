@@ -44,6 +44,7 @@ void Adian_Failed_Path_list::add_failed_path(int uid, nsaddr_t next_hop, nsaddr_
 }
 
 void Adian_Failed_Path_list::rm_entry(int uid) {
+	// add check for entry exists or not
 	fl_.erase(uid);
 	el_.erase(uid);
 }
@@ -72,6 +73,19 @@ int Adian_Failed_Path_list::check_failed_path(int uid, nsaddr_t next_hop, nsaddr
 	}
 }
 
+void Adian_Failed_Path_list::add_expire_time(int uid, double extra_time) {
+	//find the entry
+	uid_expire_t::iterator it = el_.find(uid);
+	if(it == el_.end()) {
+		// uid not in list
+		return;
+	}
+	else {
+		(*it).second += extra_time;
+	}
+}
+
+/*
 double Adian_Failed_Path_list::expire_time(int uid) {
 	// check if exists
 	uid_expire_t::iterator it = el_.find(uid);
@@ -84,15 +98,37 @@ double Adian_Failed_Path_list::expire_time(int uid) {
 		return (*it).second;
 	}
 }
+*/
 
-void Adian_Failed_Path_list::add_expire_time(int uid, double extra_time) {
-	//find the entry
-	uid_expire_t::iterator it = el_.find(uid);
-	if(it == el_.end()) {
-		// uid not in list
-		return;
+void Adian_Failed_Path_list::purge() {
+// remove the expired entries
+
+	//loop through the map and check for expired entries
+	fpl_t::iterator it;
+	uid_expire_t::iterator it_expire;
+	
+	for(it = fl_.begin(); it != fl_.end();) {
+		
+		it_expire = el_.find(it->first);
+		if(it_expire == el_.end()) {
+		// if the entry in expire list for this uid do not exist, invalid entry, so remove
+			
+			// This may cause error because of version of c++ being used
+			// Following code works for c++11
+			// http://stackoverflow.com/questions/263945/what-happens-if-you-call-erase-on-a-map-element-while-iterating-from-begin-to
+			
+			it = fl_.erase(it);		// to make iterator consistent `it =`
+			// fl_.erase(it++);		// for c++03
+
+		}
+		else if(it_expire->second <= CURRENT_TIME) {
+		// or if entry exists and it has expired, then also remove	
+			it = fl_.erase(it);
+			it_expire = el_.erase(it_expire);
+		}
+		else {
+			it++;
+		}	
 	}
-	else {
-		(*it).second += extra_time;
-	}
+
 }

@@ -9,11 +9,6 @@
 #include <map>		// lists implemented using hash tables
 #include <list>		// for failed path list
 
-#define REPLY_ROUTE_EXPIRE_TIME		1.0
-#define DATA_SOURCE_EXPIRE_TIME		1.0
-#define ATTEMPT_EXPIRE_TIME			1.0
-#define FAILED_PATH_EXPIRE_TIME		1.0
-
 typedef std::map<u_int32_t, double> seq_expire_t;
 typedef std::map<int, double> uid_expire_t;
 
@@ -40,7 +35,9 @@ public:
 	void add_reply_route(u_int32_t, nsaddr_t, double);	// (request seq_num_, reply_to address, expire time)
 	void rm_reply_route(u_int32_t);						// (request seq_num_)
 	nsaddr_t lookup(u_int32_t);							// get the reply to address corrosponding to seq_num
-	double expire_time(u_int32_t);						// get the expire time of the entry
+	//currently not needed
+	//double expire_time(u_int32_t);						// get the expire time of the entry
+	void purge();										// remove the expired entries from table. 
 };
 
 
@@ -68,7 +65,8 @@ public:
 	void add_data_source(int, nsaddr_t, double);	// (packet unique id, source address, expire time)
 	void rm_data_source(int);						// (packet unique id)
 	nsaddr_t lookup(int);							// get the source for uid
-	double expire_time(u_int32_t);					// get the expire time
+	//double expire_time(u_int32_t);					// get the expire time
+	void purge();									// remove the expired entries.
 };
 
 
@@ -93,7 +91,8 @@ public:
 	void rm_entry(int);						// (packet unique id)
 	int decrease_attempts(int);				// after making a failed attempt, decrease attempts left (uid)
 											// returns number of attempts left (so that no extra function for checking zero) 
-	double expire_time(u_int32_t);			// get the expire time
+	//double expire_time(u_int32_t);			// get the expire time
+	void purge();							// remove the expired entries from table.
 };
 
 
@@ -139,8 +138,9 @@ public:
 														//if entry do not exist calls add_new_packet
 	int check_failed_path(int, nsaddr_t, nsaddr_t);		// 1 - exists   0 - not exists
 														// (uid, next_hop, destination)
-	double expire_time(int);							// get the expire time
-	void add_expire_time(int,double);					// add expiry time in existing time 
+	void add_expire_time(int,double);					// add expiry time in existing time
+	//double expire_time(int);							// get the expire time
+	void purge();										// remove the expired entries from table. 
 };
 
 #endif
