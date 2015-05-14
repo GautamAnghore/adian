@@ -122,8 +122,8 @@ protected:
 												// with another new packet.
 	// Different Packet specific Transmission functions
 	// (TODO: Parameters need to be decided during implementations)
-	void	send_ping();
-	void	send_ping_reply();
+	void	send_ping();								// no parameters needed
+	void	send_ping_reply(nsaddr_t, u_int32_t);		//(destination address, sequence number)
 	void	send_req();
 	void	send_req_reply();
 	void	send_error();

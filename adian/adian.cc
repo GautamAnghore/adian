@@ -64,7 +64,9 @@ void List_timer::expire(Event* e) {
 
 //------------------- ADIAN Agent Class Functions Implementations------------------------//
 
-// Constructor -> 
+/*
+ *Constructor -> 
+ */
 // PT_ADIAN passed to base class to identify the control packets sent and recieved
 ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this) {
     //to bind any variable to tcl interface
@@ -74,9 +76,10 @@ ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this) {
                             //successfully or not
 }
 
-// command()
+/*
+ * command()
+ */
 // Command method is inherited from Agent class. These commands are passed from Tcl interface.
-
 int ADIAN::command(int argc, const char*const* argv) {
 
     // Two arguements passed
@@ -145,66 +148,206 @@ int ADIAN::command(int argc, const char*const* argv) {
     return Agent::command(argc, argv);
 }
 
+/*
+ * Packet Receiving Routines
+ */
 
+/*
+ * Master Routine to recv() packets
+ */
+// recv() invoked when agent recieves any packet
+void ADIAN::recv(Packet* p, Handler* h) {
 
-
-//recv() invoked when agent recieve the packet.
-
-  void Adian::recv(Packet* p, Handler* h)
-  {
-          struct hdr_cmn* ch = HDR_CMN(p);  //every packet has common header,accessed by HDR_CMN(included in common/packet.h)
-          struct hdr_ip* ih= HDR_IP(p);     //to get IP add. of packet included in ip.h
-           if (ih->saddr() == ra_addr()) {
-            // If there exists a loop, must drop the packet
-             if (ch->num_forwards() > 0) {
-                    drop(p, DROP_RTR_ROUTE_LOOP);     //if packet that we send is recieved by us also then we drop that packet.
-                    return;
-   }
-      // else if this is a packet I am originating, must add IP header
-          else if (ch->num_forwards() == 0)
-          ch->size() += IP_HDR_LEN;                    /*if the packet has been generated within the node (by
-                                                       upper layers of the node) we should add to packet’s length the overhead that
-                                                       the routing protocol is adding (in bytes).*/
-  }
-   // If it is a ADIAN packet, must process it
-    if (ch->ptype() == PT_ADIAN)
-    recv_adian_pkt(p);                           /*When the received packet is of type PT ADIAN then we will call
-					          recv ADIAN pkt() to process it (lines 18-19). If it is a data packet then
-					          we should forward it (if it is destined to other node) or to deliver it to upper
-					          layers (if it was a broadcast packet or was destined to ourself), unless TTL 3
-                                                  reached zero.*/
-
-    // Otherwise, must forward the packet (unless TTL has reached zero)
-    else
-    {
-     ih->ttl_--;
-     if (ih->ttl_ == 0) {
-     drop(p, DROP_RTR_TTL);
-     return;
+    struct hdr_cmn* ch = HDR_CMN(p);            // get the common header (packet.h)
+    struct hdr_ip* ih= HDR_IP(p);               // get the ip header (ip.h)
+    
+    if (ih->saddr() == ra_addr_) {
+        
+        // packet is revieved after forwards, i.e. there is a loop in the route
+        // drop the packet
+        if (ch->num_forwards() > 0) {
+            drop(p, DROP_RTR_ROUTE_LOOP);
+            return;
+        }
+        // else if this is a packet I am originating, must add IP header
+        else if (ch->num_forwards() == 0) {
+            // if the packet has been generated within the node (by upper layers
+            // of the node) we should add to packet’s size the ip header length
+            // But if packet is TCP or ACK pkt, IP header is already added
+            // so check and add
+            if(ch->ptype() != PT_TCP && ch->ptype() != PT_ACK) {
+                ch->size() += IP_HDR_LEN;    
+            }                   
+        }
     }
+    
+    // If it is an ADIAN packet, must process it
+    if (ch->ptype() == PT_ADIAN) {
+        ih->ttl_ -= 1;
+        // call the master reciever for adian packets
+        recvADIAN(p);
+        return;
+    }                           
+    // otherwise, must forward the packet (unless TTL has reached zero)
+    else {
+        
+        ih->ttl_--;
+        // if ttl reached zero, drop packet
+        if (ih->ttl_ == 0) {
+            drop(p, DROP_RTR_TTL);
+            return;
+        }
+    }
+    // if packet is not recieved nor dropped, packet is to be fwded
     forward_data(p);
-   }
- }
-
-
-
-// definition of recv_ADIAN_pkt()
-void Adian::recv_adian_pkt(Packet* p) {
-	struct hdr_ip* ih= HDR_IP(p);
-	struct hdr_adian_pkt* ph = HDR_ADIAN_PKT(p);
-// All routing messages are sent from and to port RT_PORT, so we check it.
-
- /*next 2 lines get IP header and ADIAN packet header as usual. After that we make sure source and destination ports are RT PORT. This
-  constant is defined in common/packet.h and it equals 255. This port is reserved to attach the routing agent.*/
-	assert(ih->sport() == RT_PORT);
-	assert(ih->dport() == RT_PORT);
-
-/* ... processing of ADIAN packet ... */
-// Release resources acquired by packet.
-	Packet::free(p);
 }
 
+/*
+ *  Master Routine to recieve PT_ADIAN packets
+ */
+// this routine identifies the packet type(adian's packet type)
+// and then calls the appropriate reciever routine for that packet
+void ADIAN::recvADIAN(Packet* p) {
 
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian *ah = HDR_ADIAN(p);
+
+    // RT_PORT = 255 // all routing packets are sent and recieved using this port
+    // check if this is true
+    assert(ih->sport() == RT_PORT);
+    assert(ih->dport() == RT_PORT);
+
+    // call the packet specific routine based on their header type
+    switch(ah->h_type_) {
+        case ADIANTYPE_PING:
+            recv_ping(p);
+            break;
+        case ADIANTYPE_PING_REPLY:
+            recv_ping_reply(p);
+            break;
+        case ADIANTYPE_REQ:
+            recv_req(p);
+            break;
+        case ADIANTYPE_REQ_REPLY:
+            recv_req_reply(p);
+            break;
+        case ADAINTYPE_ERROR:
+            recv_error(p);
+            break;
+        default: 
+            fprintf(stderr, "Invalid ADIAN packet type (%x)\n", ah->h_type_);
+            exit(1);
+    }
+}
+
+/*
+ * Routine for Recieving Ping Packet recv_ping(p) 
+ */
+void ADIAN::recv_ping(Packet* p) {
+
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_ping *ah = HDR_ADIAN_PING(p);
+
+    // ping recieved -
+    // - entry in neighbour table 
+    // - should be responded with a ping reply
+    neighbour_table_.add_entry(ih->saddr());
+    // with sequence number same as the ping request
+    // destination address = ih->saddr()
+    // seq_num_ = ah->seq_num_
+    send_ping_reply(ih->saddr(), ah->seq_num_);
+
+    // Packet's role is over, so free the memory
+    Packet::free(p);
+}
+
+/*
+ * Routine for Recieving Ping Packet Reply recv_ping_reply(p)
+ */
+void ADIAN::recv_ping_reply(Packet* p) {
+
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_ping_reply *ah = HDR_ADIAN_PING_REPLY(p);
+
+    // ping reply recieved
+    // - TODO: check the sequence number in a new list, if the entry is not there
+    //          that means entry's time has expired, so drop the reply 
+    // - entry in neighbour table
+    neighbour_table_.add_entry(ih->saddr());
+
+    Packet::free(p);
+}
+
+/*
+ * Packet Sending Routines 
+ */
+
+/*
+ * Routine for Sending Ping packet - send_ping()
+ */
+void ADIAN::send_ping() {
+
+    Packet *p = allocpkt();     // allocpkt() is defined for all agents
+
+    struct hdr_cmn *ch = HDR_CMN(p);
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_ping *ah = HDR_ADIAN_PING(p);
+
+    // adian header
+    ah->p_type_ = ADIANTYPE_PING;
+    ah->seq_num_ = get_next_seq_num();
+
+    // TODO: make an entry of sequence number in a list with an expiry time
+    // if the ping reply is recieved after expiry time, discard it.
+
+    // common header
+    ch->ptype() = PT_ADIAN;
+    ch->size() = IP_HDR_LEN + ah->size();
+    ch->error() = 0;
+    ch->addr_type() = NS_AF_INET;
+    ch->direction() = hdr_cmn::DOWN;
+    ch->next_hop() = IP_BROADCAST;
+
+    ih->saddr() = ra_addr_;
+    ih->daddr() = IP_BROADCAST;     // ping will be broadcasted
+    ih->sport() = RT_PORT;
+    ih->dport() = RT_PORT;
+    ih->ttl_ = 1;                   // since ping must be accepted by single hop
+
+    Scheduler::instance().schedule(target_, p, 0.0);    // send immediatly
+}
+
+/*
+ * Routine for Sending Ping Reply packet - send_ping_reply()
+ */
+void ADIAN::send_ping_reply(nsaddr_t daddr, u_int32_t seq_num) {
+
+    Packet *p = allocpkt();     // allocpkt() is defined for all agents
+
+    struct hdr_cmn *ch = HDR_CMN(p);
+    struct hdr_ip *ih = HDR_IP(p);
+    struct hdr_adian_ping_reply *ah = HDR_ADIAN_PING_REPLY(p);
+
+    // adian header
+    ah->p_type_ = ADIANTYPE_PING_REPLY;
+    ah->seq_num_ = seq_num;
+
+    // common header
+    ch->ptype() = PT_ADIAN;
+    ch->size() = IP_HDR_LEN + ah->size();
+    ch->error() = 0;
+    ch->addr_type() = NS_AF_INET;
+    ch->direction() = hdr_cmn::DOWN;
+    ch->next_hop() = daddr;
+
+    ih->saddr() = ra_addr_;
+    ih->daddr() = daddr;             // ping back only to requesting node 
+    ih->sport() = RT_PORT;
+    ih->dport() = RT_PORT;
+    ih->ttl_ = 1;                   // since ping must be accepted by single hop
+
+    Scheduler::instance().schedule(target_, p, 0.0);    // send immediatly
+}
 
 
   //definition of send_ADIAN_pkt()

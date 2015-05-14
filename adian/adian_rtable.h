@@ -2,6 +2,7 @@
 #define __adian_rtable_h__
 
 #include <trace.h>
+#include <ip.h>
 #include <map>		// for hash table
 #include <list>		// for double linked list
 

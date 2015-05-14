@@ -30,8 +30,8 @@ struct hdr_adian {
 	static int offset_;	// required by Packet Header manager
 
 	inline static int& offset() { return offset_; }
-	inline static hdr_adian_pkt* access(const Packet* p) {
-		return (hdr_adian_pkt*)p->access(offset_);
+	inline static hdr_adian* access(const Packet* p) {
+		return (hdr_adian*)p->access(offset_);
 	}
 
 };
@@ -40,11 +40,26 @@ struct hdr_adian {
 // used to find the neighbours
 struct hdr_adian_ping {
 
+	u_int8_t	p_type_;		// Packet type.
+								// when we define p_type_ using hdr_adian_ping and access it using
+								// hdr_adian master structure, this p_type_ is read as h_type_ and 
+								// in recvADIAN() function we can hence identify the type of packet.
+								// When defining we do not need to add hdr_adian type header. Its kind
+								// of shared header. This behaviour is obtained because of access function
+								// which only see the offset_ in the bit pattern and type cast as our wish.
+
 	u_int32_t	seq_num_;		// request sequence number
 								// used to identify the reply
 
 //	can directly use seq_num_
 //	inline u_int32_t& seq_num() { return seq_num_; }
+
+	inline int size() {
+		int sz = 0;
+		sz = 2*sizeof(u_int32_t);
+		assert(sz>=0);
+		return sz;
+	}
 };
 
 // ping response type header
@@ -64,6 +79,13 @@ struct hdr_adian_req {
 	u_int8_t	hop_count_;		// number of hops the request has already travelled
 								// USE: while recieving the request, check if hop_count_
 								// is more than limit and drop if exceeds 
+
+	inline int size() {
+		int sz = 0;
+		sz = 4*sizeof(u_int32_t);
+		assert(sz>=0);
+		return sz;
+	}
 };
 
 struct hdr_adian_req_reply {
@@ -74,13 +96,28 @@ struct hdr_adian_req_reply {
 								// was generated and not the address to which this reply is
 								// being sent
 	nsaddr_t	rootaddr_;		// root address from which request was generated
-	u_int8_t	hop_count_;		// number of hops, used to compare nodes for best path	
+	u_int8_t	hop_count_;		// number of hops, used to compare nodes for best path
+
+
+	inline int size() {
+		int sz = 0;
+		sz = 4*sizeof(u_int32_t);
+		assert(sz>=0);
+		return sz;
+	}
 };
 
 struct hdr_adian_error {
 
 	u_int32_t	seq_num_;		// sequence number, not confirm needed or not
 	nsaddr_t	daddr_;			// destination address to which data delivery failed
+	
+	inline int size() {
+		int sz = 0;
+		sz = 2*sizeof(u_int32_t);
+		assert(sz>=0);
+		return sz;
+	}
 };
 
 // for size calculation of header-space
