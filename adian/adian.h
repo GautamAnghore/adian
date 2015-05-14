@@ -1,7 +1,7 @@
 #ifndef __adian_h__
 #define __adian_h__
 
-#include "adian_pkt.h"
+// #include "adian_pkt.h"	// not needed here, included in adian.cc
 #include "adian_rtable.h"
 #include "adian_lists.h"
 
@@ -16,7 +16,6 @@
 #define CURRENT_TIME  Scheduler::instance().clock()
 #define JITTER  (Random::uniform()*0.5)
 
-#define PING_INTERVAL			1		//Interval after which agent pings to get neighbours
 #define NB_UPDATE_INTERVAL		2		//Interval after which nb_table is flushed
 #define LIST_UPDATE_INTERVAL	2		//Interval after which expired values are removed from all lists
 
@@ -24,31 +23,30 @@ class ADIAN; // forward declaration for timer definations
 
 //---------------------------- Timers --------------------------------//
 
+// Using TimerHandler as a base class instead of Handler
 // Timer for Rebuilding Neighbourhood table
-class Neighbour_timer : public Handler {
+class Neighbour_timer : public TimerHandler {
 private:
 	ADIAN*	agent;		// Agent with which this timer will be associated
-	Event	e;			// variable which will be used to catch the event
 public:
 	Neighbour_timer(ADIAN *a): agent(a) {}
 protected:
-	void expire(Event*);	// Function called when this timer expires
-							// Truncate the Neighbourhood table and call 
-							// the function to rebuild the neighbourhood table 
+	virtual void expire(Event*);	// Function called when this timer expires
+									// Truncate the Neighbourhood table and call 
+									// the function to rebuild the neighbourhood table 
 };
 
 // Instead of using different timers classes and handling different events for each list
 // updation, we can use single timer class and update each list.
-class List_timer : public Handler {
+class List_timer : public TimerHandler {
 private:
-	ADIAN*	agent;	
-	Event	e;	
+	ADIAN*	agent;
 public:
 	List_timer(ADIAN *a): agent(a) {}
 protected:
-	void expire(Event*);	// remove expired entries from each list
-							// Reply_Route_list, Data_Source_list, Attempt_list
-							// and Failure_Path_list
+	virtual void expire(Event*);	// remove expired entries from each list
+									// Reply_Route_list, Data_Source_list, Attempt_list
+									// and Failure_Path_list
 };
 
 
@@ -78,8 +76,8 @@ protected:
 	Adian_Failed_Path_list 		failed_path_list_;
 
 	// Agent Timers
-	Neighbour_timer				nbtimer;
-	List_timer					ltimer;
+	Neighbour_timer				nbtimer_;
+	List_timer					ltimer_;
 
 	// Accessibility Variables
 	PortClassifier*  			dmux_;  			// For passing packets up to agents.
@@ -132,6 +130,14 @@ protected:
 	int 	command(int, const char*const*);	// defines various commands and their implementations
 												// that can be used from TCL interface. 
 
+	//---------------- Unique Sequence Number for ADIAN Packets ---------------
+private:
+	static u_int32_t	sequence_num_;			// Initialised with 1
+public:
+	inline static u_int32_t	get_next_seq_num() {
+ 	// returns new seq num by adding 1
+ 			return sequence_num_++;		
+	}
 };
 
 #endif

@@ -1,43 +1,68 @@
-int adian_pkt::offset_;
-static class AdianHeaderClass : public PacketHeaderClass 
-{
+#include "adian.h"
+#include "adian_pkt.h"
+// #include "adian_lists.h"
+// #include "adian_rtable.h"    // both already included in adian.h
+
+// ------------------------------ TCL Hooks --------------------------------------------//
+
+int hdr_adian::offset_;                 // declaration needed for static member
+
+static class ADIANHeaderClass : public PacketHeaderClass {
 public:
-	AdianHeaderClass() : PacketHeaderClass("PacketHeader/Adian",sizeof(hdr_adian_pkt))
- 	{
-   		bind_offset(&hdr_adian_pkt::offset_);
- 	}
-} class_rtProtoAdian_hdr;
+    AdianHeaderClass() : PacketHeaderClass("PacketHeader/ADIAN", sizeof(hdr_all_adian)) {
+        bind_offset(&hdr_adian::offset_);
+    }
+} class_rtProtoADIAN_hdr;
 
 
-
-
-static class AdianClass : public TclClass 
-{
+static class ADIANClass : public TclClass {
 public:
- //class constructor and it merely calls the base class with the string “Agent/Adian” as an argument
-	AdianClass() : TclClass("Agent/Adian") {}
+    
+	AdianClass() : TclClass("Agent/ADIAN") {}          //It merely calls the base class with the 
+                                                        //string “Agent/ADIAN” as an argument
+
   	TclObject* create(int argc, const char*const* argv) {	
- //create() which returns a new ADIAN instance as a TclObject
+    //returns a new ADIAN instance as a TclObject
+    	
+        assert(argc == 5);
+        // We return a new Adian object with the identifier stated in argv[4].
+        // We use the Address class to get a nsaddr_t type from a string.
+		return (new ADIAN((nsaddr_t)Address::instance().str2addr(argv[4])));
+    }
 
-		assert(argc == 5);
-
-   		return (new Adian((nsaddr_t)Address::instance().str2addr(argv[4])));
- //we return a new Adian object with the identifier stated in argv[4]. We use the Address class to get a nsaddr t type from a string.
-
-  	}
-} class_rtProtoAdian;
-
-
-
-  //about timers expire() method. Implementing this because we only want to send a new control packet and to reschedule the timer itself.
-  void Adian_PktTimer::expire(Event* e) 
-  {
-   agent_->send_adian_pkt();
-   agent_->reset_adian_pkt_timer();
-  }
+} class_rtProtoADIAN;
 
 
+//----------------------- Timer Function Implementations --------------------------------//
 
+void Neighbour_timer::expire(Event* e) {
+
+    //flush the neighbour table
+    agent->neighbour_table_.clear();
+    //initiate rebuilding
+    agent->send_ping();                                  // function broadcasts ping packet and on recieving
+                                                         // response, adds them to neighbourhood table
+    //reschedule the timer 
+    //this is a friend class, so nbtimer_ is accessible
+    agent->nbtimer_.resched((double)NB_UPDATE_INTERVAL); // first schedule is done when "start" command is
+                                                         // invoked from tcl interface
+
+}
+
+void List_timer::expire(Event* e) {
+
+    // clear every list : remove expired entries
+    agent->reply_route_list_.purge();
+    agent->data_source_list_.purge();
+    agent->attempt_list_.purge();
+    agent->failed_path_list_.purge();
+
+    // reschedule the timer
+    agent->nbtimer_.resched((double)LIST_UPDATE_INTERVAL);
+}
+
+
+//------------------- ADIAN Agent Class Functions Implementations------------------------//
   /*calling the constructor for the base class passing PT_adian as an argument.
  it is used to identify control packets sent and received by this routing agent.*/
   Adian::Adian(nsaddr_t id) : Agent(PT_ADIAN), pkt_timer_(this) 
@@ -46,9 +71,6 @@ public:
     ra_addr_ = id;
     node_= (MobileNode*)Node::get_node_by_address(id);
   }
-
-
-
 
   //It consists of the implementation of the command() method that our agent inherites from the Agent class.
    int Adian::command(int argc, const char*const* argv) {

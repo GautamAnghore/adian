@@ -84,6 +84,7 @@ struct hdr_adian_error {
 };
 
 // for size calculation of header-space
+// use : line12 <adian.cc>
 union hdr_all_adian {
 	hdr_adian				gh;
 	hdr_adian_ping			ping;
