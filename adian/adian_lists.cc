@@ -163,7 +163,10 @@ nsaddr_t Adian_Reply_Route_list::lookup(u_int32_t seq_no){
 	route_list_t::iterator rl_it;
 
 	rl_it = rl_.find(seq_no);
-	return rl_it->second;
+	if(rl_it != rl_.end())
+		return rl_it->second;
+	else
+		return 0; // not found
 }
 
 //remove already expired enteries

@@ -33,7 +33,8 @@ typedef std::map<nsaddr_t, u_int8_t> rtable_nn_t;
 // neighbourhood table
 // implemented using double linked list
 typedef std::list<nsaddr_t> nbtable_t;
-
+// to return to be used for looping through all the address
+typedef std::vector<nsaddr_t> neighbour_entry;
 
 // belief table structure
 typedef struct {
@@ -88,8 +89,8 @@ public:
 	void clear();				//clear table
 	void rm_entry(nsaddr_t);	//remove neighbour
 	void add_entry(nsaddr_t);	//add neighbour
-	nsaddr_t* get_neighbours(); //returns all neighbour addresses
-
+	neighbour_entry get_neighbours(); //returns all neighbour addresses
+	int lookup(nsaddr_t);		// (daddr) returns ( is addr in neighbour table)
 };
 
 // ADIAN belief table

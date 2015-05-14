@@ -66,6 +66,7 @@ struct hdr_adian_ping {
 // used to reply to requests
 struct hdr_adian_ping_reply {
 
+	u_int8_t	p_type_;
 	u_int32_t	seq_num_;
 };
 
@@ -73,10 +74,11 @@ struct hdr_adian_ping_reply {
 // used for finding routes
 struct hdr_adian_req {
 
+	u_int8_t	p_type_;
 	u_int32_t	seq_num_;		// request sequence number
 	nsaddr_t	daddr_;			// destination address which is being searched
 	nsaddr_t	rootaddr_;		// root address from which request is generated
-	u_int8_t	hop_count_;		// number of hops the request has already travelled
+	u_int32_t	hop_count_;		// number of hops the request has already travelled
 								// USE: while recieving the request, check if hop_count_
 								// is more than limit and drop if exceeds 
 
@@ -90,13 +92,14 @@ struct hdr_adian_req {
 
 struct hdr_adian_req_reply {
 
+	u_int8_t	p_type_;
 	u_int32_t	seq_num_;		// sequence number of request which is being replied
 	nsaddr_t	daddr_;			// destination address which was being searched
 								// NOTE: daddr is the destination address for which request
 								// was generated and not the address to which this reply is
 								// being sent
 	nsaddr_t	rootaddr_;		// root address from which request was generated
-	u_int8_t	hop_count_;		// number of hops, used to compare nodes for best path
+	u_int32_t	hop_count_;		// number of hops, used to compare nodes for best path
 
 
 	inline int size() {
@@ -109,9 +112,10 @@ struct hdr_adian_req_reply {
 
 struct hdr_adian_error {
 
+	u_int8_t	p_type_;
 	u_int32_t	seq_num_;		// sequence number, not confirm needed or not
 	nsaddr_t	daddr_;			// destination address to which data delivery failed
-	
+
 	inline int size() {
 		int sz = 0;
 		sz = 2*sizeof(u_int32_t);

@@ -9,6 +9,12 @@
 #include <map>		// lists implemented using hash tables
 #include <list>		// for failed path list
 
+#define REPLY_ROUTE_LIST_LIFE		1
+#define DATA_SOURCE_LIST_LIFE		1
+#define ATTEMPT_LIST_LIFE			1
+#define FAILED_PATH_LIST_LIFE		1
+
+
 typedef std::map<u_int32_t, double> seq_expire_t;
 typedef std::map<int, double> uid_expire_t;
 
