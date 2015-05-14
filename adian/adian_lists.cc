@@ -174,7 +174,7 @@ void Adian_Reply_Route_list::purge(){
 	for (rl_it = rl_.begin(); rl_it !=rl_.end();)
 	{
 		el_it = el_.find(rl_it->first) //if entry is not in expire list it will delete it from router list also.
-		if(el_it = el_.end()){
+		if(el_it == el_.end()){
 			rl_it = rl_.erase(rl_it);
 		}
 		else if(el_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
@@ -208,8 +208,8 @@ void Adian_Data_Source_list::rm_data_source(int uid){
 	uel_it = el_.find(uid);
 	srcl_it = sl_.find(uid);
 
-	el_.erase(el_it);
-	sl_.erase(rl_it);
+	el_.erase(uel_it);
+	sl_.erase(srcl_it);
 }
 
 //to return source node which generated this packet(uid)
@@ -228,7 +228,7 @@ void Adian_Data_Source_list::purge(){
 	for (srcl_it = sl_.begin(); srcl_it != sl_.end();)
 	{
 		uel_it = el_.find(srcl_it->first) //if entry is not in expire list it will delete it from source list also.
-		if(uel_it = el_.end()){
+		if(uel_it == el_.end()){
 			srcl_it = sl_.erase(srcl_it);
 		}
 
@@ -241,3 +241,60 @@ void Adian_Data_Source_list::purge(){
 		}
 	}
 }
+
+
+//---------------------------------Attempt list-------------------------------------------
+
+//constructor
+Adian_Attempt_list::Adian_Attempt_list(){ }
+
+//add a new entry to the attempt list
+void Adian_Attempt_list::add_entry(int uid, int max_attempts, double expire_time){
+	al_[uid] = max_attempts;
+	el_[uid] = expire_time;
+}
+
+//to remove an entry from attempt list
+void Adian_Attempt_list::rm_entry(int uid){
+	attempt_list_t::iterator al_it;
+	uid_expire_t::iterator	el_it;
+
+	al_it = al_.find(uid);
+	el_it = el_.find(uid);
+
+	al_.erase(al_it);
+	el_.erase(el_it);
+}
+
+//to reduce the number of attemts upon failure
+int Adian_Attempt_list::decrease_attempts(int uid){
+	attempt_list_t::iterator al_it;
+	al_it = al_.find(uid);
+	al_it->second -=1;//decreases no of attempts by one
+
+	return al_it->second;
+}
+
+//purge() function to remove duplicate and already expired enteries
+void Adian_Attempt_list::purge(){
+	uid_expire_t::iterator el_it;
+	attempt_list_t::iterator al_it;
+
+	for (al_it = al_.begin(); al_it != al_.end();)
+	{
+		el_it = el_.find(al_it->first) //if entry is not in expire list it will delete it from attempt list also.
+		if(el_it == el_.end()){
+			al_it = al_.erase(al_it);
+		}
+
+		else if(el_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
+			al_it = al_.erase(al_it);
+			el_it = el_.erase(el_it);
+		}
+		else{
+			al_it++;
+		}
+	}	
+}
+
+//-------------------------------------------------------------
