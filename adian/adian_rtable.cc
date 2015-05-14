@@ -192,6 +192,7 @@ void Adian_btable::add_success(nsaddr_t next_hop, nsaddr_t dest_addr) {
 			it_bt->success+=1;
 			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
 		}
+	}
 }
 
 //to add a failure transaction to that path
@@ -203,6 +204,7 @@ void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
 			it_bt->total+=1;
 			it_bt->belief = ((float)(it_bt->success)/(it_bt->total))*100;
 		}
+	}
 }
 
 //to select other paths if one path fails
