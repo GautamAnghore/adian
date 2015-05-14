@@ -132,3 +132,57 @@ void Adian_Failed_Path_list::purge() {
 	}
 
 }
+
+
+
+//-------------------------------Reply route list implementation ------------------------
+
+//constructor
+Adian_Reply_Route_list::Adian_Reply_Route_list(){ }
+
+//to add a new reply route to the list
+void Adian_Reply_Route_list::add_reply_route(u_int32_t seq_no, nsaddr_t reply_to, double expire_time){
+	rl_[seq_no] = reply_to; //adds reply_to in route list corresponding to the seq_no
+	el_[seq_no] = expire_time; //adds expire_time in expire list corresponding to the seq_no
+}
+
+void Adian_Reply_Route_list::rm_reply_route(u_int32_t seq_no){
+	seq_expire_t::iterator el_it;
+	route_list_t::iterator rl_it;
+
+//find the expiry time and reply to nodde corresponding to that seq_no and remove it
+	el_it = el_.find(seq_no);
+	rl_it = rl_.find(seq_no);
+
+	el_.erase(el_it);
+	rl_.erase(rl_it);
+}
+
+//return return to node with this seq_no
+nsaddr_t Adian_Reply_Route_list::lookup(u_int32_t seq_no){
+	route_list_t::iterator rl_it;
+
+	rl_it = rl_.find(seq_no);
+	return rl_it->second;
+}
+
+//remove already expired enteries
+void Adian_Reply_Route_list::purge(){
+	seq_expire_t::iterator el_it;
+	route_list_t::iterator rl_it;
+
+	for (rl_it = rl_.begin(); rl_it !=rl_.end();)
+	{
+		el_it = el_.find(rl_it->first) //if entry is not in expire list it will delete it from router list also.
+		if(el_it = el_.end()){
+			rl_it = rl_.erase(rl_it);
+		}
+		else if(el_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
+			rl_it = rl_.erase(rl_it);
+			el_it = el_.erase(el_it);
+		}
+		else{
+			rl_it++;
+		}
+	}
+}
