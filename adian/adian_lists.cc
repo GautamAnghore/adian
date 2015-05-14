@@ -186,3 +186,58 @@ void Adian_Reply_Route_list::purge(){
 		}
 	}
 }
+
+
+//----------------------------------------Data source list----------------------------------
+
+//constructor
+Adian_Data_Source_list::Adian_Data_Source_list(){ }
+
+//to add a new source to the list
+void Adian_Data_Source_list::add_data_source(int uid, nsaddr_t source_addr, double expire_time){
+	sl_[uid] = source_addr;
+	el_[uid] = expire_time;
+}
+
+//to remove a data source from the list
+void Adian_Data_Source_list::rm_data_source(int uid){
+	uid_expire_t::iterator uel_it;
+	src_list_t::iterator srcl_it;
+
+//find the expiry time and reply to nodde corresponding to that seq_no and remove it
+	uel_it = el_.find(uid);
+	srcl_it = sl_.find(uid);
+
+	el_.erase(el_it);
+	sl_.erase(rl_it);
+}
+
+//to return source node which generated this packet(uid)
+nsaddr_t Adian_Data_Source_list::lookup(int uid){
+	src_list_t::iterator srcl_it;
+
+	srcl_it = sl_.find(uid);
+	return srcl_it->second;
+}
+
+//to remove the expired entries from both lists
+void Adian_Data_Source_list::purge(){
+	uid_expire_t::iterator uel_it;
+	src_list_t::iterator srcl_it;
+
+	for (srcl_it = sl_.begin(); srcl_it != sl_.end();)
+	{
+		uel_it = el_.find(srcl_it->first) //if entry is not in expire list it will delete it from source list also.
+		if(uel_it = el_.end()){
+			srcl_it = sl_.erase(srcl_it);
+		}
+
+		else if(uel_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
+			srcl_it = sl_.erase(srcl_it);
+			uel_it = el_.erase(uel_it);
+		}
+		else{
+			srcl_it++;
+		}
+	}
+}
