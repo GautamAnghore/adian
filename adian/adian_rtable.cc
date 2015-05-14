@@ -208,7 +208,7 @@ void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
 //to select other paths if one path fails
 btable_entry Adian_btable::get_path(nsaddr_t dest){
 	float min_belief = 0.00;//initial minimum belief is set to 0; to compare
-	btable_entry next_suitable_path; //another btable_entry type entry to return a complete next suitable path to follow if one fails
+	btable_entry next_suitable_path = {0}; //another btable_entry type entry to return a complete next suitable path to follow if one fails
 	btable_t::iterator it_bt
 
 	for(it_bt = bt_.begin(); it_bt != bt_.end(); it_bt++) {
