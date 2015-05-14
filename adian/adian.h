@@ -81,7 +81,9 @@ protected:
 
 	// Accessibility Variables
 	PortClassifier*  			dmux_;  			// For passing packets up to agents.
+													// Initialised by command given from tcl interface
 	Trace*  					logtarget_; 		// For logging.
+													// Initialised by command given from tcl interface
 
 
 public:

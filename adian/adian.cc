@@ -58,69 +58,92 @@ void List_timer::expire(Event* e) {
     agent->failed_path_list_.purge();
 
     // reschedule the timer
-    agent->nbtimer_.resched((double)LIST_UPDATE_INTERVAL);
+    agent->ltimer_.resched((double)LIST_UPDATE_INTERVAL);
 }
 
 
 //------------------- ADIAN Agent Class Functions Implementations------------------------//
-  /*calling the constructor for the base class passing PT_adian as an argument.
- it is used to identify control packets sent and received by this routing agent.*/
-  Adian::Adian(nsaddr_t id) : Agent(PT_ADIAN), pkt_timer_(this) 
-  {
-    bind_bool("accessible_var_", &accessible_var_);
+
+// Constructor -> 
+// PT_ADIAN passed to base class to identify the control packets sent and recieved
+ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this) {
+    //to bind any variable to tcl interface
+    //bind_bool("accessible_var_", &accessible_var_);
     ra_addr_ = id;
-    node_= (MobileNode*)Node::get_node_by_address(id);
-  }
-
-  //It consists of the implementation of the command() method that our agent inherites from the Agent class.
-   int Adian::command(int argc, const char*const* argv) {
-   if (argc == 2)
-    {
-     if (strcasecmp(argv[1], "start") == 0) 
-     {
-	pkt_timer_.resched(0.0); 
-	return TCL_OK;
-     }
-
-   else if (strcasecmp(argv[1], "print_rtable") == 0) 
-   {
-    if (logtarget_ != 0) {
-    sprintf(logtarget_->pt_->buffer(), "P %f _%d_ Routing Table",CURRENT_TIME,ra_addr());
-    logtarget_->pt_->dump();
-    rtable_.print(logtarget_);
-   }
-
-   else {
-    fprintf(stdout, "%f _%d_ If you want to print this routing table ""you must create a trace file in your tcl script",CURRENT_TIME,ra_addr());
-     }
-     return TCL_OK;
-   }
-
+    logtarget_ = 0;         //As it will be used to check whether trace file was connected 
+                            //successfully or not
 }
 
-  else if (argc == 3) {
-  // Obtains corresponding dmux to carry packets to upper layers
-   if (strcmp(argv[1], "port-dmux") == 0) {
-   dmux_ = (PortClassifier*)TclObject::lookup(argv[2]);
-   if (dmux_ == 0) {
-   fprintf(stderr, "%s: %s lookup of %s failed\n",__FILE__,argv[1],argv[2]);
-   return TCL_ERROR;
-   }
-  return TCL_OK;
- }
+// command()
+// Command method is inherited from Agent class. These commands are passed from Tcl interface.
 
+int ADIAN::command(int argc, const char*const* argv) {
 
-   // Obtains corresponding tracer
-  else if (strcmp(argv[1], "log-target") == 0 || strcmp(argv[1], "tracetarget") == 0) {
-  logtarget_ = (Trace*)TclObject::lookup(argv[2]);
-  if (logtarget_ == 0)
-  return TCL_ERROR;
-  return TCL_OK;
-   }
-  }
-  // Pass the command to the base class
- return Agent::command(argc, argv);
- }
+    // Two arguements passed
+    if (argc == 2) {
+        
+        // "start" command - (mendatory operation)
+        // command used to start the functioning of agent
+        if (strcasecmp(argv[1], "start") == 0) {
+            // start the timer for neighbour table updation
+            nbtimer_.resched(0.0);      // now the agent will start pinging
+            // start the timer for lists updation
+            ltimer_.resched(0.5);       // 0.5 - to avoid syncing of both timers
+                                        // and no need to update lists initially 
+
+            return TCL_OK;
+        }
+        // "print_rtable" command 
+        // prints the routing table to trace file
+        else if (strcasecmp(argv[1], "print_rtable") == 0) {
+            
+            if (logtarget_ != 0) {
+                sprintf(logtarget_->pt_->buffer(), "A %f _%d_ Routing Table",CURRENT_TIME,ra_addr_);
+                logtarget_->pt_->dump();
+                routing_table_.print(logtarget_);
+            }
+
+            else {
+                fprintf(stdout, "%f _%d_ If you want to print this routing table"
+                " you must create a trace file in your tcl script", CURRENT_TIME, ra_addr_);
+            }
+            return TCL_OK;
+        }
+        //TODO: Add commands for printing all the tables and all the lists
+    }
+    // Three Arguements Passed
+    else if (argc == 3) {
+        
+        // "port-dmux" command -> (mendatory operation)
+        // obtains corresponding dmux to carry packets to upper layers
+        if (strcmp(argv[1], "port-dmux") == 0) {
+            
+            //look the object specified in the list of tcl objects
+            dmux_ = (PortClassifier*)TclObject::lookup(argv[2]);
+            
+            if (dmux_ == 0) {
+                fprintf(stderr, "%s: %s lookup of %s failed\n", __FILE__, argv[1], argv[2]);
+                return TCL_ERROR;
+            }
+            return TCL_OK;
+        }
+        // "log-target" or "tracetarget" command -> (mendatory operation)
+        // obtains corresponding tracer object and initialises logtarget_
+        else if (strcmp(argv[1], "log-target") == 0 || strcmp(argv[1], "tracetarget") == 0) {
+            
+            logtarget_ = (Trace*)TclObject::lookup(argv[2]);
+            
+            if (logtarget_ == 0) {
+                return TCL_ERROR;
+            }
+            return TCL_OK;
+        }
+    }
+
+    // If no commands matches the above conditions, 
+    // pass the command to be handled by base class
+    return Agent::command(argc, argv);
+}
 
 
 
