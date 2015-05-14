@@ -124,8 +124,9 @@ void Adian_nbtable::add_entry(nsaddr_t neighbour){
 }
 
 //to get all the neighbour nodes from neighbourhood table
-nsaddr_t* Adian_nbtable::get_neighbours(){
-	std::vector<nsaddr_t*> neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
+typedef std::vector<nsaddr_t*> neighbour_entry;
+neighbour_entry Adian_nbtable::get_neighbours(){
+	neighbour_entry neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
 	return neighbours_;
 }
 
