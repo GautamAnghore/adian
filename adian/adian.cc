@@ -354,6 +354,15 @@ void ADIAN::recv_req_reply(Packet* p) {
 }
 
 /*
+ * Routine for Recieving Error packet
+ */
+// This type of packet is recieved only if the data fwding was failed by next hop
+void ADIAN::recv_error(Packet* p) {
+    //algo
+
+}
+
+/*
  * Packet Sending Routines 
  */
 
@@ -513,91 +522,34 @@ void ADIAN::send_req_reply(nsaddr_t daddr, nsaddr_t route_daddr, nsaddr_t root, 
     Scheduler::instance().schedule(target_, p, 0.0);    // send immediatly
 }
 
+/*
+ * Routine for Sending Error Packet
+ */
+// This routine is called after the allowed attempts are over and packet sending is not successfull
+void ADIAN::send_error() {
 
-
-  //definition of send_ADIAN_pkt()
-void Adian::send_adian_pkt() {
-    Packet* p= allocpkt();		//allocation of packet,allocpkt() is defined for all agents.
-    //we get common HDR and hdr IP
-    struct hdr_cmn* ch= HDR_CMN(p);
-    struct hdr_ip* ih= HDR_IP(p);
-    struct hdr_adian_pkt* ph = HDR_ADIAN_PKT(p);
-
-    //we are assigning values to packet header attributes.
-    ph->pkt_src()= ra_addr();
-    ph->pkt_len()= 7;
-    ph->pkt_seq_num()= seq_num_++;
-    
-//The common header in NS as used below.Configuration of packet header. 
-    ch->ptype()= PT_ADIAN;
-    ch->direction()=hdr_cmn::DOWN;
-    ch->size()=IP_HDR_LEN + ph->pkt_len(); //size calculated in bytes and for ns2 calculations such as propogation delay.
-    ch->error()=0;				//to check whether any error in transmission or not
-    ch->next_hop()=IP_BROADCAST;	/*assigns the next hop to which the packet must be sent to.
-  					  it is established as IP BROADCAST because we want all
-                                          of the neighboring nodes to receive this control packet.Included in ip.h. */
-  
-	ch->addr_type()=NS_AF_INET;		/*The last field we fill is the address type.We choose NS AF INET because we are implementing
-                                          an Internet protocol.Included in packet.h*/
-
-  	ch->xmit_failure_= ADIAN_mac_failed_callback;
-  	ch->xmit_failure_data_ = (void*)this;
-
-
-//configuration of ip header     
-     ih->saddr()=ra_addr();
-     ih->daddr()=IP_BROADCAST;
-     ih->sport()=RT_PORT;
-     ih->dport()=RT_PORT;
-     ih->ttl()=IP_DEF_TTL;	/*new constant called IP DEF TTL which
-                                  is defined in common/ip.h and represents the default TTL value for IP packets.*/
-   
-   	Scheduler::instance().schedule(target_, p, JITTER); /*sending a packet is equivalent to schedule it at a certain time.
-						         The Packet class inherits from the Connector class, which has a
-						         reference to a TclObject called target . This is the handler which will process
-						         the event, and is passed as an argument to the schedule() function.*/
 }
 
-
-
-
-//definition of reset_ADIAN_pkt_timer
-//Our packet sending timer performs another callback to reschedule itself. pkt timer is rescheduled to expire five seconds later.
-void Adian::reset_adian_pkt_timer() 
-{
-	pkt_timer_.resched((double)5.0);
-}
-
-
-
-
-//Definition of forward data() function which decides whether a packet has to be delivered to the upper-layer agents or to be forwarded to  other node.
-void Adian::forward_data(Packet* p) 
+/*
+ * Routine for forwarding data based on type of data
+ */
+void ADIAN::forward_data(Packet* p) 
 {
 	struct hdr_cmn* ch = HDR_CMN(p);
 	struct hdr_ip* ih = HDR_IP(p);
-	ch->xmit_failure_= adian_mac_failed_callback;
-	ch->xmit_failure_data_ = (void*)this;
 
-//a packet has to be delivered to the upper-layer agents
-  	if (ch->direction() == hdr_cmn::UP && ((u_int32_t)ih->daddr() == IP_BROADCAST || ih->daddr() == ra_addr())) 
+  	if (ch->direction() == hdr_cmn::UP && ((u_int32_t)ih->daddr() == IP_BROADCAST || ih->daddr() == ra_addr_) 
    	{
     	dmux_->recv(p, 0.0);
     	return;
    	}
-
-/*When it is an incoming packet and destination address is the node itself or broadcast, then we use the node’s dmux
-  (if we remember it is a PortClassifier object) to accept the incoming packet.*/
   	else {
    		ch->direction() = hdr_cmn::DOWN;
    		ch->addr_type() = NS_AF_INET;
    		if ((u_int32_t)ih->daddr() == IP_BROADCAST)
    			ch->next_hop() = IP_BROADCAST;
-
-
-/*If the packet is a broadcast one, then next hop will be filled accordingly. If not, we make use of our routing table to find out the next hop.
-  Our implementation returns IP BROADCAST when there is no route to destination address. In such a case we print a debug message and drop the  packet. If everything goes fine then we will send the packet .*/
-  		else {
+		else {
+            // get the next hop for destination from routing table
     		nsaddr_t next_hop = rtable_.lookup(ih->daddr());
     		if (next_hop == IP_BROADCAST) {
     			debug("%f: Agent %d can not forward a packet destined to %d\n",CURRENT_TIME,ra_addr(),ih->daddr());
