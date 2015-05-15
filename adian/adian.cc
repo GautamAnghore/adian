@@ -550,11 +550,13 @@ void ADIAN::forward_data(Packet* p)
    			ch->next_hop() = IP_BROADCAST;
 		else {
             // get the next hop for destination from routing table
-    		nsaddr_t next_hop = rtable_.lookup(ih->daddr());
+    		nsaddr_t next_hop = routing_table_.lookup(ih->daddr()).next_hop;
     		if (next_hop == IP_BROADCAST) {
     			debug("%f: Agent %d can not forward a packet destined to %d\n",CURRENT_TIME,ra_addr(),ih->daddr());
-    			drop(p, DROP_RTR_NO_ROUTE);
-				return;
+                // start building path
+                send_req(ih->daddr(), ra_addr_, get_next_seq_num(), IP_DEF_TTL);
+				drop(p, DROP_RTR_NO_ROUTE);
+                return;
 	   		}
   		else
    			ch->next_hop() = next_hop;
