@@ -171,6 +171,7 @@ set protolist {
 	Mac 	# network wireless stack
 # Mobility, Ad-Hoc Networks, Sensor Nets:
 	AODV 	# routing protocol for ad-hoc networks
+	ADIAN 	# new protocol
 	Diffusion 	# diffusion/diffusion.cc
 	IMEP 	# Internet MANET Encapsulation Protocol, for ad-hoc networks
         MIP 	# Mobile IP, mobile/mip-reg.cc

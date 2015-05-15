@@ -200,6 +200,8 @@ static const packet_t PT_DCCP_RESET = 71;
 static const packet_t PT_MDART = 72;
 	
         // insert new packet types here
+static const packet_t PT_ADIAN = 74;
+
 static packet_t       PT_NTYPE = 73; // This MUST be the LAST one
 
 enum packetClass
@@ -346,6 +348,7 @@ public:
 		name_[PT_TORA]= "TORA";
 		name_[PT_DSR]= "DSR";
 		name_[PT_AODV]= "AODV";
+		name_[PT_ADIAN] = "ADIAN";
 		name_[PT_MDART]= "MDART";
 		name_[PT_IMEP]= "IMEP";
 

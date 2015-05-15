@@ -51,6 +51,7 @@
 #include <tora/tora_packet.h> //TORA
 #include <imep/imep_spec.h>         // IMEP
 #include <aodv/aodv_packet.h> //AODV
+#include <adian/adian_pkt.h>	//ADIAN New Protocol
 #include <aomdv/aomdv_packet.h>
 #include <mdart/mdart_packet.h>
 #include <mdart/mdart_function.h>
@@ -962,6 +963,77 @@ CMUTrace::format_aodv(Packet *p, int offset)
                 abort();
         }
 }
+void
+CMUTrace::format_adian(Packet *p, int offset)
+{
+	struct hdr_adian *ah = HDR_ADIAN(p);
+	
+	switch(ah->h_type_) {
+		case ADIANTYPE_PING:
+		case ADIANTYPE_PING_REPLY:
+			if (pt_->tagged()) {
+				sprintf(pt_->buffer() + offset,
+					"-adian:s %d (%s) ",
+					ah->seq_num_(),
+					(ah->h_type_ == ADIANTYPE_PING)?"PING":"PING REPLY");
+			}
+			else if (newtrace_) {
+				sprintf(pt_->buffer() + offset,
+					"-adian:s %d (%s) ",
+					ah->seq_num_(),
+					(ah->h_type_ == ADIANTYPE_PING)?"PING":"PING REPLY");
+			}
+			else {
+				sprintf(pt_->buffer() + offset,
+					"[adian %d %s] ",
+					ah->seq_num_(),
+					(ah->h_type_ == ADIANTYPE_PING)?"PING":"PING REPLY");
+			}
+			break;
+		case ADIANTYPE_REQ:
+		case ADIANTYPE_REQ_REPLY:
+			if (pt_->tagged()) {
+				sprintf(pt_->buffer() + offset,
+					"-adian:o %d -adian:s %d -adian:d %d ",
+					ah->rootaddr_,
+					ah->seq_num_,
+					ah->daddr_);
+			}
+			else if (newtrace_) {
+				sprintf(pt_->buffer() + offset,
+					"-P adian -Po %d -Ps %d -Pd %d ",,
+					ah->rootaddr_,
+					ah->seq_num_,
+					ah->daddr_);
+			}
+			else {
+				sprintf(pt_->buffer() + offset,
+					"[adian %d %d %d] ",,
+					ah->rootaddr_,
+					ah->seq_num_,
+					ah->daddr_);
+			}
+			break;
+		case ADAINTYPE_ERROR:
+			if (pt_->tagged()) {
+					sprintf(pt_->buffer() + offset,
+						"ERROR seq %s",
+						ah->seq_num_);
+				}
+			else if (newtrace_) {
+				sprintf(pt_->buffer() + offset,
+						"ERROR seq %s",
+						ah->seq_num_);
+			}
+			else {
+				sprintf(pt_->buffer() + offset,
+						"ERROR seq %s",
+						ah->seq_num_);
+			}
+			break;
+		}
+	
+}
 
 // AOMDV patch
 void
@@ -1421,6 +1493,9 @@ void CMUTrace::format(Packet* p, const char *why)
 		switch(ch->ptype()) {
 		case PT_AODV:
 			format_aodv(p, offset);
+			break;
+		case PT_ADIAN:
+			format_adian(p, offset);
 			break;
 		// AOMDV patch
 		case PT_AOMDV:

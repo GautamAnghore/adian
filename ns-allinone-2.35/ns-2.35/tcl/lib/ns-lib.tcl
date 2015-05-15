@@ -630,6 +630,9 @@ Simulator instproc create-wireless-node args {
 		    AODV {
 			    set ragent [$self create-aodv-agent $node]
 		    }
+		    ADIAN {
+		    	set ragent [$self create-adian-agent $node]
+		    }
 		    AOMDV {
 			    set ragent [$self create-aomdv-agent $node]
 		    }
@@ -859,6 +862,13 @@ Simulator instproc create-aodv-agent { node } {
         return $ragent
 }
 
+Simulator instproc create-adian-agent { node } {
+
+	set ragent [new Agent/ADIAN [$node node-addr]]
+		$self at 0.0 "$ragent start"
+		$node set ragent_ $ragent
+		return $ragent
+}
 # AOMDV patch
 Simulator instproc create-aomdv-agent { node } {
 	set ragent [new Agent/AOMDV [$node node-addr]]
