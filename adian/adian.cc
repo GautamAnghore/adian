@@ -68,7 +68,7 @@ void List_timer::expire(Event* e) {
  *Constructor -> 
  */
 // PT_ADIAN passed to base class to identify the control packets sent and recieved
-ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this) {
+ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this), belief_table_(this) {
     //to bind any variable to tcl interface
     //bind_bool("accessible_var_", &accessible_var_);
     ra_addr_ = id;

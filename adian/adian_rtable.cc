@@ -149,8 +149,6 @@ int Adian_nbtable::lookup(nsaddr_t daddr) {
 
 //-------------------------------Belief Table functions----------------------------------
 
-//constructor
-Adian_btable::Adian_btable(){ }
 
 
 //to print all content of belief table in trace file
@@ -223,7 +221,7 @@ void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
 }
 
 //to select other paths if one path fails
-btable_entry Adian_btable::get_path(nsaddr_t dest){
+btable_entry Adian_btable::get_path(int uid, nsaddr_t dest){
 	float min_belief = 12.50;//initial minimum belief is set to 0; to compare
 	btable_entry next_suitable_path = {0}; //another btable_entry type entry to return a complete next suitable path to follow if one fails
 	btable_t::iterator it_bt;
@@ -234,7 +232,7 @@ btable_entry Adian_btable::get_path(nsaddr_t dest){
 		}
 
 		else if((it_bt->daddr == dest)&&(it_bt->belief > min_belief)) {
-			if(!(Adian_Failed_Path_list::check_failed_path(uid, it_bt->next_hop, dest)) { //checks if that node does not exists in failure list
+			if(!(agent->failed_path_list_.check_failed_path(uid, it_bt->next_hop, dest)) { //checks if that node does not exists in failure list
 				min_belief = it_bt->belief;
 				//next suitable path values will be equal to the entry values currently pointed by iterator
 				next_suitable_path.next_hop = it_bt->next_hop;

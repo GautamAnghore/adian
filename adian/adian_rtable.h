@@ -6,6 +6,7 @@
 #include <map>		// for hash table
 #include <list>		// for double linked list
 
+class ADIAN;
 
 //routing table structure
 typedef struct {
@@ -96,11 +97,12 @@ public:
 // ADIAN belief table
 class Adian_btable {
 
+	ADIAN *agent;
 	btable_t bt_;
 
 public:
 
-	Adian_btable();
+	Adian_btable(ADIAN* a) : agent(a) {};
 	void print(Trace*);								//print the table
 	void clear();
 	void rm_entry(nsaddr_t, nsaddr_t);				//remove entry( next_hop, destination_address)
@@ -109,7 +111,7 @@ public:
 													//total number of trasactions = 0, success= 0, belief = 100.00
 	void add_success(nsaddr_t, nsaddr_t);			//add a successful transaction to this path
 	void add_failure(nsaddr_t, nsaddr_t);			//add a failed transaction to this path
-	btable_entry get_path(nsaddr_t);				//look for a path to daddr using next_hop
+	btable_entry get_path(int, nsaddr_t);			//(uid, dest)look for a path to daddr using next_hop
 
 };
 

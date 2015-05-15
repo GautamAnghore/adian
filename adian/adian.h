@@ -57,6 +57,7 @@ class ADIAN : public Agent {
 	// Friend List
 	friend class Neighbour_timer;
 	friend class List_timer;
+	friend class Adian_btable;
 
 protected:
 	//(why protected? why not private)
@@ -124,8 +125,8 @@ protected:
 	// (TODO: Parameters need to be decided during implementations)
 	void	send_ping();								// no parameters needed
 	void	send_ping_reply(nsaddr_t, u_int32_t);		//(destination address, sequence number)
-	void	send_req();
-	void	send_req_reply();
+	void	send_req(nsaddr_t, nsaddr_t, u_int32_t, int);
+	void	send_req_reply(nsaddr_t, nsaddr_t, nsaddr_t, u_int32_t, u_int32_t, int);
 	void	send_error();
 
 	//--------------------- TCL Binding helper function -----------------------
