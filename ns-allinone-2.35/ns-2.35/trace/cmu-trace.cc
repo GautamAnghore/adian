@@ -967,26 +967,29 @@ void
 CMUTrace::format_adian(Packet *p, int offset)
 {
 	struct hdr_adian *ah = HDR_ADIAN(p);
-	
+	struct hdr_adian_ping *ping = HDR_ADIAN_PING(p);
+	struct hdr_adian_req *req = HDR_ADIAN_REQ(p);
+	struct hdr_adian_error *error = HDR_ADIAN_ERROR(p);
+
 	switch(ah->h_type_) {
 		case ADIANTYPE_PING:
 		case ADIANTYPE_PING_REPLY:
 			if (pt_->tagged()) {
 				sprintf(pt_->buffer() + offset,
 					"-adian:s %d (%s) ",
-					ah->seq_num_(),
+					ping->seq_num_,
 					(ah->h_type_ == ADIANTYPE_PING)?"PING":"PING REPLY");
 			}
 			else if (newtrace_) {
 				sprintf(pt_->buffer() + offset,
 					"-adian:s %d (%s) ",
-					ah->seq_num_(),
+					ping->seq_num_,
 					(ah->h_type_ == ADIANTYPE_PING)?"PING":"PING REPLY");
 			}
 			else {
 				sprintf(pt_->buffer() + offset,
 					"[adian %d %s] ",
-					ah->seq_num_(),
+					ping->seq_num_,
 					(ah->h_type_ == ADIANTYPE_PING)?"PING":"PING REPLY");
 			}
 			break;
@@ -995,40 +998,40 @@ CMUTrace::format_adian(Packet *p, int offset)
 			if (pt_->tagged()) {
 				sprintf(pt_->buffer() + offset,
 					"-adian:o %d -adian:s %d -adian:d %d ",
-					ah->rootaddr_,
-					ah->seq_num_,
-					ah->daddr_);
+					req->rootaddr_,
+					req->seq_num_,
+					req->daddr_);
 			}
 			else if (newtrace_) {
 				sprintf(pt_->buffer() + offset,
-					"-P adian -Po %d -Ps %d -Pd %d ",,
-					ah->rootaddr_,
-					ah->seq_num_,
-					ah->daddr_);
+					"-P adian -Po %d -Ps %d -Pd %d ",
+					req->rootaddr_,
+					req->seq_num_,
+					req->daddr_);
 			}
 			else {
 				sprintf(pt_->buffer() + offset,
-					"[adian %d %d %d] ",,
-					ah->rootaddr_,
-					ah->seq_num_,
-					ah->daddr_);
+					"[adian %d %d %d] ",
+					req->rootaddr_,
+					req->seq_num_,
+					req->daddr_);
 			}
 			break;
 		case ADAINTYPE_ERROR:
 			if (pt_->tagged()) {
 					sprintf(pt_->buffer() + offset,
-						"ERROR seq %s",
-						ah->seq_num_);
+						"ERROR seq %d",
+						error->seq_num_);
 				}
 			else if (newtrace_) {
 				sprintf(pt_->buffer() + offset,
-						"ERROR seq %s",
-						ah->seq_num_);
+						"ERROR seq %d",
+						error->seq_num_);
 			}
 			else {
 				sprintf(pt_->buffer() + offset,
-						"ERROR seq %s",
-						ah->seq_num_);
+						"ERROR seq %d",
+						error->seq_num_);
 			}
 			break;
 		}

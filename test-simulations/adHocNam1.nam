@@ -1,0 +1,146 @@
+n -t * -s 0  -x 80 -y 200 -Z 0 -z 10  -v circle -c black
+n -t * -s 1  -x 100 -y 150 -Z 0 -z 10  -v circle -c black
+n -t * -s 2  -x 320 -y 50 -Z 0 -z 10  -v circle -c black
+V -t * -v 1.0a5 -a 0
+W -t * -x 300 -y 300
+A -t * -n 1 -p 0 -o 0x7fffffff -c 30 -a 1
+A -t * -h 1 -m 1073741823 -s 0
+n -t 0 -s 0 -S DLABEL -l "ftp-source" -L ""
+m -t 0 -s 0 -n mark0 -c red -h circle
+n -t 0 -s 2 -S DLABEL -l "ftp-sink" -L ""
+m -t 0 -s 2 -n mark1 -c blue -h circle
+n -t 0 -s 1 -S DLABEL -l "intermediate" -L ""
+m -t 0 -s 1 -n mark2 -c green -h circle
+d -t 0.000000000 -s 0 -d -1 -p tcp -e 40 -c 2 -a 0 -i 0 -k RTR
++ -t 0.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 1 -k RTR 
+- -t 0.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 1 -k RTR
+h -t 0.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 1 -k RTR
++ -t 0.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 2 -k RTR 
+- -t 0.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 2 -k RTR
+h -t 0.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 2 -k RTR
++ -t 0.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 3 -k RTR 
+- -t 0.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 3 -k RTR
+h -t 0.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 3 -k RTR
+r -t 0.000828180 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 1 -k RTR
++ -t 0.000828180 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 4 -k RTR 
+- -t 0.000828180 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 4 -k RTR
+h -t 0.000828180 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 4 -k RTR
+r -t 0.002086359 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 2 -k RTR
++ -t 0.002086359 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 5 -k RTR 
+- -t 0.002086359 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 5 -k RTR
+h -t 0.002086359 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 5 -k RTR
+r -t 0.002086985 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 2 -k RTR
++ -t 0.002086985 -s 2 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 6 -k RTR 
+- -t 0.002086985 -s 2 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 6 -k RTR
+h -t 0.002086985 -s 2 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 6 -k RTR
+r -t 0.003683791 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 3 -k RTR
++ -t 0.003683791 -s 1 -d 2 -p ADIAN -e 28 -c 2 -a 0 -i 7 -k RTR 
+- -t 0.003683791 -s 1 -d 2 -p ADIAN -e 28 -c 2 -a 0 -i 7 -k RTR
+h -t 0.003683791 -s 1 -d 2 -p ADIAN -e 28 -c 2 -a 0 -i 7 -k RTR
+n -t 1.000000 -s 1 -x 100.000000 -y 150.000000 -U -6.401844 -V -7.682213 -T 7.810250
++ -t 2.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 8 -k RTR 
+- -t 2.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 8 -k RTR
+h -t 2.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 8 -k RTR
++ -t 2.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 9 -k RTR 
+- -t 2.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 9 -k RTR
+h -t 2.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 9 -k RTR
++ -t 2.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 10 -k RTR 
+- -t 2.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 10 -k RTR
+h -t 2.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 10 -k RTR
+r -t 2.000988198 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 9 -k RTR
++ -t 2.000988198 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 11 -k RTR 
+- -t 2.000988198 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 11 -k RTR
+h -t 2.000988198 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 11 -k RTR
+r -t 2.000988815 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 9 -k RTR
++ -t 2.000988815 -s 2 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 12 -k RTR 
+- -t 2.000988815 -s 2 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 12 -k RTR
+h -t 2.000988815 -s 2 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 12 -k RTR
+r -t 2.001747630 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 10 -k RTR
++ -t 2.001747630 -s 1 -d 2 -p ADIAN -e 28 -c 2 -a 0 -i 13 -k RTR 
+- -t 2.001747630 -s 1 -d 2 -p ADIAN -e 28 -c 2 -a 0 -i 13 -k RTR
+h -t 2.001747630 -s 1 -d 2 -p ADIAN -e 28 -c 2 -a 0 -i 13 -k RTR
+r -t 2.004605586 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 8 -k RTR
++ -t 2.004605586 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 14 -k RTR 
+- -t 2.004605586 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 14 -k RTR
+h -t 2.004605586 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 14 -k RTR
+d -t 3.000000000 -s 0 -d -1 -p tcp -e 40 -c 2 -a 0 -i 15 -k RTR
++ -t 3.000000000 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 16 -k RTR 
+- -t 3.000000000 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 16 -k RTR
+h -t 3.000000000 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 16 -k RTR
++ -t 3.000000000 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 17 -k RTR 
+- -t 3.000000000 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 17 -k RTR
+h -t 3.000000000 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 17 -k RTR
++ -t 3.000892219 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 18 -k RTR 
+- -t 3.000892219 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 18 -k RTR
+h -t 3.000892219 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 18 -k RTR
++ -t 3.001994219 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 19 -k RTR 
+- -t 3.001994219 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 19 -k RTR
+h -t 3.001994219 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 19 -k RTR
+n -t 4.000000 -s 1 -x 80.794468 -y 126.953362 -U -2.546268 -V -9.670394 -T 12.093960
++ -t 4.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 20 -k RTR 
+- -t 4.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 20 -k RTR
+h -t 4.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 20 -k RTR
++ -t 4.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 21 -k RTR 
+- -t 4.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 21 -k RTR
+h -t 4.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 21 -k RTR
++ -t 4.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 22 -k RTR 
+- -t 4.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 22 -k RTR
+h -t 4.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 22 -k RTR
+r -t 4.000888244 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 21 -k RTR
++ -t 4.000888244 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 23 -k RTR 
+- -t 4.000888244 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 23 -k RTR
+h -t 4.000888244 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 23 -k RTR
+r -t 4.001726487 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 20 -k RTR
++ -t 4.001726487 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 24 -k RTR 
+- -t 4.001726487 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 24 -k RTR
+h -t 4.001726487 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 24 -k RTR
++ -t 6.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 25 -k RTR 
+- -t 6.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 25 -k RTR
+h -t 6.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 25 -k RTR
++ -t 6.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 26 -k RTR 
+- -t 6.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 26 -k RTR
+h -t 6.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 26 -k RTR
++ -t 6.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 27 -k RTR 
+- -t 6.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 27 -k RTR
+h -t 6.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 27 -k RTR
+r -t 6.002231252 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 25 -k RTR
++ -t 6.002231252 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 28 -k RTR 
+- -t 6.002231252 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 28 -k RTR
+h -t 6.002231252 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 28 -k RTR
+r -t 6.003129560 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 26 -k RTR
++ -t 6.003129560 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 29 -k RTR 
+- -t 6.003129560 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 29 -k RTR
+h -t 6.003129560 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 29 -k RTR
++ -t 8.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 30 -k RTR 
+- -t 8.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 30 -k RTR
+h -t 8.000000000 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 30 -k RTR
++ -t 8.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 31 -k RTR 
+- -t 8.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 31 -k RTR
+h -t 8.000000000 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 31 -k RTR
++ -t 8.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 32 -k RTR 
+- -t 8.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 32 -k RTR
+h -t 8.000000000 -s 2 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 32 -k RTR
+r -t 8.000948374 -s 0 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 31 -k RTR
++ -t 8.000948374 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 33 -k RTR 
+- -t 8.000948374 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 33 -k RTR
+h -t 8.000948374 -s 0 -d 1 -p ADIAN -e 28 -c 2 -a 0 -i 33 -k RTR
+r -t 8.001846748 -s 1 -d -1 -p ADIAN -e 28 -c 2 -a 0 -i 30 -k RTR
++ -t 8.001846748 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 34 -k RTR 
+- -t 8.001846748 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 34 -k RTR
+h -t 8.001846748 -s 1 -d 0 -p ADIAN -e 28 -c 2 -a 0 -i 34 -k RTR
++ -t 9.000000000 -s 0 -d 1 -p tcp -e 40 -c 2 -a 0 -i 35 -k RTR 
+- -t 9.000000000 -s 0 -d 1 -p tcp -e 40 -c 2 -a 0 -i 35 -k RTR
+h -t 9.000000000 -s 0 -d 1 -p tcp -e 40 -c 2 -a 0 -i 35 -k RTR
+d -t 9.001581220 -s 1 -d 1 -p tcp -e 40 -c 2 -a 0 -i 35 -k RTR
++ -t 9.001581220 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 36 -k RTR 
+- -t 9.001581220 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 36 -k RTR
+h -t 9.001581220 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 36 -k RTR
++ -t 9.001581220 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 37 -k RTR 
+- -t 9.001581220 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 37 -k RTR
+h -t 9.001581220 -s 1 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 37 -k RTR
++ -t 9.003177627 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 38 -k RTR 
+- -t 9.003177627 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 38 -k RTR
+h -t 9.003177627 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 38 -k RTR
++ -t 9.004099627 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 39 -k RTR 
+- -t 9.004099627 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 39 -k RTR
+h -t 9.004099627 -s 0 -d -1 -p ADIAN -e 36 -c 2 -a 0 -i 39 -k RTR

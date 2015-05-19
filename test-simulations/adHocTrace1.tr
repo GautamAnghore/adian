@@ -1,0 +1,85 @@
+r -t 0.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 0 -Iv 32 -Pn tcp -Ps 0 -Pa 0 -Pf 0 -Po 0 
+d -t 0.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw NRTE -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 0 -Iv 31 -Pn tcp -Ps 0 -Pa 0 -Pf 0 -Po 0 
+s -t 0.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 1 -Iv 1 -adian:s 2 (PING) 
+s -t 0.000000000 -Hs 1 -Hd -1 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 2 -Iv 1 -adian:s 3 (PING) 
+s -t 0.000000000 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 3 -Iv 1 -adian:s 4 (PING) 
+r -t 0.000828180 -Hs 1 -Hd -1 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 1 -Iv 1 -adian:s 2 (PING) 
+s -t 0.000828180 -Hs 1 -Hd 0 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 4 -Iv 1 -adian:s 2 (PING REPLY) 
+r -t 0.002086359 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 2 -Iv 1 -adian:s 3 (PING) 
+s -t 0.002086359 -Hs 0 -Hd 1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 5 -Iv 1 -adian:s 3 (PING REPLY) 
+r -t 0.002086985 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 2 -Iv 1 -adian:s 3 (PING) 
+s -t 0.002086985 -Hs 2 -Hd 1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 6 -Iv 1 -adian:s 3 (PING REPLY) 
+r -t 0.003683791 -Hs 1 -Hd -1 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 2 -Mt 800 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 3 -Iv 1 -adian:s 4 (PING) 
+s -t 0.003683791 -Hs 1 -Hd 2 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 2.255 -It ADIAN -Il 28 -If 0 -Ii 7 -Iv 1 -adian:s 4 (PING REPLY) 
+r -t 0.006954509 -Hs 1 -Hd 1 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 5 -Iv 1 -adian:s 3 (PING REPLY) 
+r -t 0.008743047 -Hs 0 -Hd 0 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 0 -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 4 -Iv 1 -adian:s 2 (PING REPLY) 
+r -t 0.015280290 -Hs 2 -Hd 2 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 2 -Ms 1 -Mt 800 -Is 1.255 -Id 2.255 -It ADIAN -Il 28 -If 0 -Ii 7 -Iv 1 -adian:s 4 (PING REPLY) 
+r -t 0.017110706 -Hs 1 -Hd 1 -Ni 1 -Nx 100.00 -Ny 150.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 2 -Mt 800 -Is 2.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 6 -Iv 1 -adian:s 3 (PING REPLY) 
+M 1.00000 1 (100.00, 150.00, 0.00), (50.00, 90.00), 10.00
+s -t 2.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 8 -Iv 1 -adian:s 5 (PING) 
+s -t 2.000000000 -Hs 1 -Hd -1 -Ni 1 -Nx 93.60 -Ny 142.32 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 9 -Iv 1 -adian:s 6 (PING) 
+s -t 2.000000000 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 10 -Iv 1 -adian:s 7 (PING) 
+r -t 2.000988198 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 9 -Iv 1 -adian:s 6 (PING) 
+s -t 2.000988198 -Hs 0 -Hd 1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 11 -Iv 1 -adian:s 6 (PING REPLY) 
+r -t 2.000988815 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 9 -Iv 1 -adian:s 6 (PING) 
+s -t 2.000988815 -Hs 2 -Hd 1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 12 -Iv 1 -adian:s 6 (PING REPLY) 
+r -t 2.001747630 -Hs 1 -Hd -1 -Ni 1 -Nx 93.59 -Ny 142.30 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 2 -Mt 800 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 10 -Iv 1 -adian:s 7 (PING) 
+s -t 2.001747630 -Hs 1 -Hd 2 -Ni 1 -Nx 93.59 -Ny 142.30 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 2.255 -It ADIAN -Il 28 -If 0 -Ii 13 -Iv 1 -adian:s 7 (PING REPLY) 
+r -t 2.003403260 -Hs 1 -Hd 1 -Ni 1 -Nx 93.58 -Ny 142.29 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 2 -Mt 800 -Is 2.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 12 -Iv 1 -adian:s 6 (PING REPLY) 
+r -t 2.004605586 -Hs 1 -Hd -1 -Ni 1 -Nx 93.57 -Ny 142.28 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 8 -Iv 1 -adian:s 5 (PING) 
+s -t 2.004605586 -Hs 1 -Hd 0 -Ni 1 -Nx 93.57 -Ny 142.28 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 14 -Iv 1 -adian:s 5 (PING REPLY) 
+r -t 2.006142031 -Hs 2 -Hd 2 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 2 -Ms 1 -Mt 800 -Is 1.255 -Id 2.255 -It ADIAN -Il 28 -If 0 -Ii 13 -Iv 1 -adian:s 7 (PING REPLY) 
+r -t 2.008271439 -Hs 0 -Hd 0 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 0 -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 14 -Iv 1 -adian:s 5 (PING REPLY) 
+r -t 2.010440033 -Hs 1 -Hd 1 -Ni 1 -Nx 93.53 -Ny 142.24 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 11 -Iv 1 -adian:s 6 (PING REPLY) 
+r -t 3.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 15 -Iv 32 -Pn tcp -Ps 0 -Pa 0 -Pf 0 -Po 0 
+d -t 3.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw NRTE -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 15 -Iv 31 -Pn tcp -Ps 0 -Pa 0 -Pf 0 -Po 0 
+s -t 3.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 16 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+s -t 3.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 17 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+r -t 3.000892219 -Hs 1 -Hd -1 -Ni 1 -Nx 87.19 -Ny 134.63 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 16 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+s -t 3.000892219 -Hs 1 -Hd -1 -Ni 1 -Nx 87.19 -Ny 134.63 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 18 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+r -t 3.001994219 -Hs 1 -Hd -1 -Ni 1 -Nx 87.18 -Ny 134.62 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 17 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+s -t 3.001994219 -Hs 1 -Hd -1 -Ni 1 -Nx 87.18 -Ny 134.62 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 19 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+r -t 3.002916438 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 18 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+r -t 3.002917045 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 18 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+r -t 3.003798438 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 19 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+r -t 3.003799045 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 19 -Iv 32 -P adian -Po 0 -Ps 8 -Pd 2 
+M 4.00000 1 (80.79, 126.95, 0.00), (50.00, 10.00), 10.00
+s -t 4.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 20 -Iv 1 -adian:s 9 (PING) 
+s -t 4.000000000 -Hs 1 -Hd -1 -Ni 1 -Nx 80.79 -Ny 126.95 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 21 -Iv 1 -adian:s 10 (PING) 
+s -t 4.000000000 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 22 -Iv 1 -adian:s 11 (PING) 
+r -t 4.000888244 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 21 -Iv 1 -adian:s 10 (PING) 
+s -t 4.000888244 -Hs 0 -Hd 1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 23 -Iv 1 -adian:s 10 (PING REPLY) 
+r -t 4.001726487 -Hs 1 -Hd -1 -Ni 1 -Nx 80.79 -Ny 126.94 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 20 -Iv 1 -adian:s 9 (PING) 
+s -t 4.001726487 -Hs 1 -Hd 0 -Ni 1 -Nx 80.79 -Ny 126.94 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 24 -Iv 1 -adian:s 9 (PING REPLY) 
+r -t 4.003261218 -Hs 0 -Hd 0 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 0 -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 24 -Iv 1 -adian:s 9 (PING REPLY) 
+r -t 4.005069949 -Hs 1 -Hd 1 -Ni 1 -Nx 80.78 -Ny 126.90 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 23 -Iv 1 -adian:s 10 (PING REPLY) 
+s -t 6.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 25 -Iv 1 -adian:s 12 (PING) 
+s -t 6.000000000 -Hs 1 -Hd -1 -Ni 1 -Nx 75.70 -Ny 107.61 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 26 -Iv 1 -adian:s 13 (PING) 
+s -t 6.000000000 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 27 -Iv 1 -adian:s 14 (PING) 
+r -t 6.002231252 -Hs 1 -Hd -1 -Ni 1 -Nx 75.70 -Ny 107.59 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 25 -Iv 1 -adian:s 12 (PING) 
+s -t 6.002231252 -Hs 1 -Hd 0 -Ni 1 -Nx 75.70 -Ny 107.59 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 28 -Iv 1 -adian:s 12 (PING REPLY) 
+r -t 6.003129560 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 26 -Iv 1 -adian:s 13 (PING) 
+s -t 6.003129560 -Hs 0 -Hd 1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 29 -Iv 1 -adian:s 13 (PING REPLY) 
+r -t 6.004664485 -Hs 1 -Hd 1 -Ni 1 -Nx 75.69 -Ny 107.57 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 29 -Iv 1 -adian:s 13 (PING REPLY) 
+r -t 6.006753411 -Hs 0 -Hd 0 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 0 -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 28 -Iv 1 -adian:s 12 (PING REPLY) 
+s -t 8.000000000 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 30 -Iv 1 -adian:s 15 (PING) 
+s -t 8.000000000 -Hs 1 -Hd -1 -Ni 1 -Nx 70.61 -Ny 88.27 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 31 -Iv 1 -adian:s 16 (PING) 
+s -t 8.000000000 -Hs 2 -Hd -1 -Ni 2 -Nx 320.00 -Ny 50.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 2.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 32 -Iv 1 -adian:s 17 (PING) 
+r -t 8.000948374 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 31 -Iv 1 -adian:s 16 (PING) 
+s -t 8.000948374 -Hs 0 -Hd 1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 33 -Iv 1 -adian:s 16 (PING REPLY) 
+r -t 8.001846748 -Hs 1 -Hd -1 -Ni 1 -Nx 70.60 -Ny 88.25 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id -1.255 -It ADIAN -Il 28 -If 0 -Ii 30 -Iv 1 -adian:s 15 (PING) 
+s -t 8.001846748 -Hs 1 -Hd 0 -Ni 1 -Nx 70.60 -Ny 88.25 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 34 -Iv 1 -adian:s 15 (PING REPLY) 
+r -t 8.003311869 -Hs 0 -Hd 0 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 0 -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 28 -If 0 -Ii 34 -Iv 1 -adian:s 15 (PING REPLY) 
+r -t 8.005300991 -Hs 1 -Hd 1 -Ni 1 -Nx 70.60 -Ny 88.22 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 28 -If 0 -Ii 33 -Iv 1 -adian:s 16 (PING REPLY) 
+r -t 9.000000000 -Hs 0 -Hd -2 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 35 -Iv 32 -Pn tcp -Ps 0 -Pa 0 -Pf 0 -Po 0 
+s -t 9.000000000 -Hs 0 -Hd 1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 35 -Iv 31 -Pn tcp -Ps 0 -Pa 0 -Pf 0 -Po 0 
+r -t 9.001581220 -Hs 1 -Hd 1 -Ni 1 -Nx 68.06 -Ny 78.59 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 35 -Iv 31 -Pn tcp -Ps 0 -Pa 0 -Pf 1 -Po 0 
+d -t 9.001581220 -Hs 1 -Hd 1 -Ni 1 -Nx 68.06 -Ny 78.59 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw NRTE -Ma 13a -Md 1 -Ms 0 -Mt 800 -Is 0.0 -Id 2.0 -It tcp -Il 40 -If 0 -Ii 35 -Iv 30 -Pn tcp -Ps 0 -Pa 0 -Pf 1 -Po 0 
+s -t 9.001581220 -Hs 1 -Hd -1 -Ni 1 -Nx 68.06 -Ny 78.59 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 36 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+s -t 9.001581220 -Hs 1 -Hd -1 -Ni 1 -Nx 68.06 -Ny 78.59 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 37 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+r -t 9.003177627 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 36 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+s -t 9.003177627 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 38 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+r -t 9.004099627 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 1 -Mt 800 -Is 1.255 -Id 0.255 -It ADIAN -Il 36 -If 0 -Ii 37 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+s -t 9.004099627 -Hs 0 -Hd -1 -Ni 0 -Nx 80.00 -Ny 200.00 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md 0 -Ms 0 -Mt 0 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 39 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+r -t 9.005142033 -Hs 1 -Hd -1 -Ni 1 -Nx 68.05 -Ny 78.55 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 38 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 
+r -t 9.006404033 -Hs 1 -Hd -1 -Ni 1 -Nx 68.05 -Ny 78.54 -Nz 0.00 -Ne -1.000000 -Nl RTR -Nw --- -Ma 0 -Md ffffffff -Ms 0 -Mt 800 -Is 0.255 -Id 1.255 -It ADIAN -Il 36 -If 0 -Ii 39 -Iv 32 -P adian -Po 1 -Ps 18 -Pd 2 

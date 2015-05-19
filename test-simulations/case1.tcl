@@ -9,12 +9,15 @@ set val(ll)             LL                         ;# link layer type
 set val(ant)            Antenna/OmniAntenna        ;# antenna model
 set val(ifqlen)         50                         ;# max packet in ifq
 set val(nn)             2                          ;# number of mobilenodes
-set val(rp)             AODV                       ;# routing protocol
+set val(rp)             ADIAN                       ;# routing protocol
 
 
 set ns		[new Simulator]
 set tracefd     [open simple1.tr w]
 $ns trace-all $tracefd
+
+set namfd [open samplenam.nam w]
+$ns namtrace-all-wireless $namfd 300 300 
 
 # set up topography object
 set topo       [new Topography]
@@ -77,6 +80,7 @@ proc stop {} {
     global ns tracefd
     $ns flush-trace
     close $tracefd
+    exit 0
 }
 
 puts "Starting Simulation..."
