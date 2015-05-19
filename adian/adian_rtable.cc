@@ -1,6 +1,8 @@
 #include "adian_rtable.h"
-#include <vector>
+#include "adian.h"
 #include "adian_lists.h"
+
+#include <algorithm>
 
 //--------------- routing table functions ---------------------
 
@@ -23,7 +25,7 @@ void Adian_rtable::print(Trace* out) {
   		if (it_nn == rt_nn_.end()) {
   			// number of nodes entry not exists for destination node
   			// that means inconsistent data
-  			sprintf(stderr, "Inconsistent Data, number of nodes entry not exists for %d node\n", (*it_hop).first);
+  			fprintf(stderr, "Inconsistent Data, number of nodes entry not exists for %d node\n", (*it_hop).first);
   		}
   		else {
   			//found all data, dump it
@@ -116,7 +118,8 @@ void Adian_nbtable::clear(){
 
 // remove a particular entry in neighbourhood table
 void Adian_nbtable::rm_entry(nsaddr_t neighbour){
-	nb_.erase(neighbour);
+	nbtable_t::iterator it = std::find(nb_.begin(), nb_.end(), neighbour);
+	nb_.erase(it);
 }
 
 // add a new node to the neighbourhood 
@@ -125,9 +128,8 @@ void Adian_nbtable::add_entry(nsaddr_t neighbour){
 }
 
 //to get all the neighbour nodes from neighbourhood table
-neighbour_entry Adian_nbtable::get_neighbours(){
-	neighbour_entry neighbours_{std::begin(nb_),std::end(nb_)};//copies all the list to vector "neighbours_"
-	return neighbours_;
+nbtable_t Adian_nbtable::get_neighbours(){
+	return nb_;
 }
 
 int Adian_nbtable::lookup(nsaddr_t daddr) {
@@ -142,9 +144,6 @@ int Adian_nbtable::lookup(nsaddr_t daddr) {
 
 	return 0;
 }
-
-//vectors elements can be accesed directly with their index. (std::vector v = get_neighbours();)
-
 
 
 //-------------------------------Belief Table functions----------------------------------
@@ -221,7 +220,7 @@ void Adian_btable::add_failure(nsaddr_t next_hop, nsaddr_t dest_addr) {
 }
 
 //to select other paths if one path fails
-btable_entry Adian_btable::get_path(int uid, nsaddr_t dest){
+btable_entry Adian_btable::get_path(ADIAN *agent, int uid, nsaddr_t dest){
 	float min_belief = 12.50;//initial minimum belief is set to 0; to compare
 	btable_entry next_suitable_path = {0}; //another btable_entry type entry to return a complete next suitable path to follow if one fails
 	btable_t::iterator it_bt;
@@ -232,7 +231,7 @@ btable_entry Adian_btable::get_path(int uid, nsaddr_t dest){
 		}
 
 		else if((it_bt->daddr == dest)&&(it_bt->belief > min_belief)) {
-			if(!(agent->failed_path_list_.check_failed_path(uid, it_bt->next_hop, dest)) { //checks if that node does not exists in failure list
+			if(!(agent->failed_path_list_.check_failed_path(uid, it_bt->next_hop, dest))) { //checks if that node does not exists in failure list
 				min_belief = it_bt->belief;
 				//next suitable path values will be equal to the entry values currently pointed by iterator
 				next_suitable_path.next_hop = it_bt->next_hop;
@@ -249,12 +248,13 @@ btable_entry Adian_btable::get_path(int uid, nsaddr_t dest){
 		}
 	}
 	//if some other possible nod is found it will return next_suitable_path structure of btable_entry type except return null;
+	/*
 	if(next_suitable_path.next_hop == NULL){
 		return NULL;
 	}
-
 	else {
 		return next_suitable_path;
 	}
-
+	*/
+	return next_suitable_path;
 }

@@ -68,6 +68,13 @@ struct hdr_adian_ping_reply {
 
 	u_int8_t	p_type_;
 	u_int32_t	seq_num_;
+
+	inline int size() {
+		int sz = 0;
+		sz = 2*sizeof(u_int32_t);
+		assert(sz>=0);
+		return sz;
+	}
 };
 
 // request to send data to destination

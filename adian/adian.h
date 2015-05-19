@@ -20,7 +20,6 @@
 #define LIST_UPDATE_INTERVAL	2		//Interval after which expired values are removed from all lists
 
 class ADIAN; // forward declaration for timer definations
-
 //---------------------------- Timers --------------------------------//
 
 // Using TimerHandler as a base class instead of Handler

@@ -1,4 +1,4 @@
-#include "adian_list.h"
+#include "adian_lists.h"
 
 #define CURRENT_TIME Scheduler::instance().clock()
 
@@ -117,14 +117,16 @@ void Adian_Failed_Path_list::purge() {
 			// Following code works for c++11
 			// http://stackoverflow.com/questions/263945/what-happens-if-you-call-erase-on-a-map-element-while-iterating-from-begin-to
 			
-			it = fl_.erase(it);		// to make iterator consistent `it =`
-			// fl_.erase(it++);		// for c++03
+			//it = fl_.erase(it);		// to make iterator consistent `it =`
+			fl_.erase(it++);		// for c++03
 
 		}
 		else if(it_expire->second <= CURRENT_TIME) {
 		// or if entry exists and it has expired, then also remove	
-			it = fl_.erase(it);
-			it_expire = el_.erase(it_expire);
+			//it = fl_.erase(it);
+			fl_.erase(it++);
+			//it_expire = el_.erase(it_expire);
+			el_.erase(it_expire++);
 		}
 		else {
 			it++;
@@ -176,13 +178,16 @@ void Adian_Reply_Route_list::purge(){
 
 	for (rl_it = rl_.begin(); rl_it !=rl_.end();)
 	{
-		el_it = el_.find(rl_it->first) //if entry is not in expire list it will delete it from router list also.
+		el_it = el_.find(rl_it->first); //if entry is not in expire list it will delete it from router list also.
 		if(el_it == el_.end()){
-			rl_it = rl_.erase(rl_it);
+			//rl_it = rl_.erase(rl_it);
+			rl_.erase(rl_it++);
 		}
 		else if(el_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
-			rl_it = rl_.erase(rl_it);
-			el_it = el_.erase(el_it);
+			//rl_it = rl_.erase(rl_it);
+			rl_.erase(rl_it++);
+			//el_it = el_.erase(el_it);
+			rl_.erase(rl_it++);
 		}
 		else{
 			rl_it++;
@@ -230,14 +235,17 @@ void Adian_Data_Source_list::purge(){
 
 	for (srcl_it = sl_.begin(); srcl_it != sl_.end();)
 	{
-		uel_it = el_.find(srcl_it->first) //if entry is not in expire list it will delete it from source list also.
+		uel_it = el_.find(srcl_it->first); //if entry is not in expire list it will delete it from source list also.
 		if(uel_it == el_.end()){
-			srcl_it = sl_.erase(srcl_it);
+			//srcl_it = sl_.erase(srcl_it);
+			sl_.erase(srcl_it++);
 		}
 
 		else if(uel_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
-			srcl_it = sl_.erase(srcl_it);
-			uel_it = el_.erase(uel_it);
+			//srcl_it = sl_.erase(srcl_it);
+			sl_.erase(srcl_it++);
+			//uel_it = el_.erase(uel_it);
+			el_.erase(uel_it++);
 		}
 		else{
 			srcl_it++;
@@ -285,19 +293,20 @@ void Adian_Attempt_list::purge(){
 
 	for (al_it = al_.begin(); al_it != al_.end();)
 	{
-		el_it = el_.find(al_it->first) //if entry is not in expire list it will delete it from attempt list also.
+		el_it = el_.find(al_it->first); //if entry is not in expire list it will delete it from attempt list also.
 		if(el_it == el_.end()){
-			al_it = al_.erase(al_it);
+			//al_it = al_.erase(al_it);
+			al_.erase(al_it++);
 		}
 
 		else if(el_it->second <= CURRENT_TIME){ //if expire time is les than current time it will delete that entry from both
-			al_it = al_.erase(al_it);
-			el_it = el_.erase(el_it);
+			//al_it = al_.erase(al_it);
+			al_.erase(al_it++);
+			//el_it = el_.erase(el_it);
+			el_.erase(el_it++);
 		}
 		else{
 			al_it++;
 		}
 	}	
 }
-
-//-------------------------------------------------------------

@@ -35,7 +35,7 @@ typedef std::map<nsaddr_t, u_int8_t> rtable_nn_t;
 // implemented using double linked list
 typedef std::list<nsaddr_t> nbtable_t;
 // to return to be used for looping through all the address
-typedef std::vector<nsaddr_t> neighbour_entry;
+//typedef std::vector<nsaddr_t> neighbour_entry;
 
 // belief table structure
 typedef struct {
@@ -90,19 +90,20 @@ public:
 	void clear();				//clear table
 	void rm_entry(nsaddr_t);	//remove neighbour
 	void add_entry(nsaddr_t);	//add neighbour
-	neighbour_entry get_neighbours(); //returns all neighbour addresses
+	nbtable_t get_neighbours(); //returns all neighbours in form of list
+								//NOTE: The need for making nb_ private is not clear
 	int lookup(nsaddr_t);		// (daddr) returns ( is addr in neighbour table)
 };
 
 // ADIAN belief table
 class Adian_btable {
 
-	ADIAN *agent;
+	//ADIAN *agent;
 	btable_t bt_;
 
 public:
 
-	Adian_btable(ADIAN* a) : agent(a) {};
+	Adian_btable() {};
 	void print(Trace*);								//print the table
 	void clear();
 	void rm_entry(nsaddr_t, nsaddr_t);				//remove entry( next_hop, destination_address)
@@ -111,7 +112,7 @@ public:
 													//total number of trasactions = 0, success= 0, belief = 100.00
 	void add_success(nsaddr_t, nsaddr_t);			//add a successful transaction to this path
 	void add_failure(nsaddr_t, nsaddr_t);			//add a failed transaction to this path
-	btable_entry get_path(int, nsaddr_t);			//(uid, dest)look for a path to daddr using next_hop
+	btable_entry get_path(ADIAN*, int, nsaddr_t);			//(uid, dest)look for a path to daddr using next_hop
 
 };
 

@@ -1,15 +1,15 @@
 #include "adian.h"
 #include "adian_pkt.h"
-// #include "adian_lists.h"
-// #include "adian_rtable.h"    // both already included in adian.h
-
+#include "adian_lists.h"
+#include "adian_rtable.h"    // both already included in adian.h
+#include <vector>
 // ------------------------------ TCL Hooks --------------------------------------------//
 
 int hdr_adian::offset_;                 // declaration needed for static member
 
 static class ADIANHeaderClass : public PacketHeaderClass {
 public:
-    AdianHeaderClass() : PacketHeaderClass("PacketHeader/ADIAN", sizeof(hdr_all_adian)) {
+    ADIANHeaderClass() : PacketHeaderClass("PacketHeader/ADIAN", sizeof(hdr_all_adian)) {
         bind_offset(&hdr_adian::offset_);
     }
 } class_rtProtoADIAN_hdr;
@@ -18,7 +18,7 @@ public:
 static class ADIANClass : public TclClass {
 public:
     
-	AdianClass() : TclClass("Agent/ADIAN") {}          //It merely calls the base class with the 
+	ADIANClass() : TclClass("Agent/ADIAN") {}          //It merely calls the base class with the 
                                                         //string “Agent/ADIAN” as an argument
 
   	TclObject* create(int argc, const char*const* argv) {	
@@ -64,11 +64,12 @@ void List_timer::expire(Event* e) {
 
 //------------------- ADIAN Agent Class Functions Implementations------------------------//
 
+u_int32_t ADIAN::sequence_num_ = 1;
 /*
  *Constructor -> 
  */
 // PT_ADIAN passed to base class to identify the control packets sent and recieved
-ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this), belief_table_(this) {
+ADIAN::ADIAN(nsaddr_t id) : Agent(PT_ADIAN), nbtimer_(this), ltimer_(this) {
     //to bind any variable to tcl interface
     //bind_bool("accessible_var_", &accessible_var_);
     ra_addr_ = id;
@@ -379,7 +380,7 @@ void ADIAN::send_ping() {
 
     // adian header
     ah->p_type_ = ADIANTYPE_PING;
-    ah->seq_num_ = get_next_seq_num();
+    ah->seq_num_ = ADIAN::get_next_seq_num();
 
     // TODO: make an entry of sequence number in a list with an expiry time
     // if the ping reply is recieved after expiry time, discard it.
@@ -447,8 +448,9 @@ void ADIAN::send_req(nsaddr_t route_daddr, nsaddr_t root, u_int32_t seq_num, int
         // set daddr as neighbour address
         // set passed values
         // send packet
-    neighbour_entry neighbours = neighbour_table_.get_neighbours();
-    neighbour_entry::iterator it;
+
+    nbtable_t neighbours = neighbour_table_.get_neighbours();
+    nbtable_t::iterator it;
 
     for(it = neighbours.begin(); it != neighbours.end(); it++) {
         Packet *p = allocpkt();     // allocpkt() is defined for all agents
@@ -538,9 +540,9 @@ void ADIAN::forward_data(Packet* p)
 	struct hdr_cmn* ch = HDR_CMN(p);
 	struct hdr_ip* ih = HDR_IP(p);
 
-  	if (ch->direction() == hdr_cmn::UP && ((u_int32_t)ih->daddr() == IP_BROADCAST || ih->daddr() == ra_addr_) 
+  	if (ch->direction() == hdr_cmn::UP && ((u_int32_t)ih->daddr() == IP_BROADCAST || ih->daddr() == ra_addr_) )
    	{
-    	dmux_->recv(p, 0.0);
+    	dmux_->recv(p, 0);
     	return;
    	}
   	else {
@@ -552,15 +554,16 @@ void ADIAN::forward_data(Packet* p)
             // get the next hop for destination from routing table
     		nsaddr_t next_hop = routing_table_.lookup(ih->daddr()).next_hop;
     		if (next_hop == IP_BROADCAST) {
-    			debug("%f: Agent %d can not forward a packet destined to %d\n",CURRENT_TIME,ra_addr(),ih->daddr());
+    			debug("%f: Agent %d can not forward a packet destined to %d\n",CURRENT_TIME,ra_addr_,ih->daddr());
                 // start building path
-                send_req(ih->daddr(), ra_addr_, get_next_seq_num(), IP_DEF_TTL);
+                send_req(ih->daddr(), ra_addr_, ADIAN::get_next_seq_num(), IP_DEF_TTL);
 				drop(p, DROP_RTR_NO_ROUTE);
                 return;
 	   		}
-  		else
-   			ch->next_hop() = next_hop;
-  		}
+      		else
+       			ch->next_hop() = next_hop;
+      		}
+
   		Scheduler::instance().schedule(target_, p, 0.0);  //sending actual packet when no error
 
  	}
